@@ -1,0 +1,23 @@
+.titel {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.input {
+  margin: 20px 0;
+}
+
+.input .username,
+.input .email,
+.input .password {
+  margin-bottom: 10px;
+}
+
+.button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
