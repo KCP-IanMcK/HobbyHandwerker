@@ -1,5 +1,6 @@
 package org.example.backend.controller;
 
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -9,9 +10,7 @@ import org.example.backend.models.UserDao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +37,18 @@ public class UserController {
     } else {
       System.out.println("<0");
       return ResponseEntity.notFound().build();
+    }
+  }
+
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @PostMapping
+  public ResponseEntity createUser(@RequestBody User user) {
+    User returnedUser = dao.saveUser(user);
+    if (returnedUser != null) {
+      return ResponseEntity.status(HttpStatus.CREATED).body(returnedUser);
+    } else {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 }
