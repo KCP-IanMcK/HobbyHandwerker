@@ -21,7 +21,7 @@ public class UserDao implements IUserDao {
     } catch (Exception e) {
     }
     List<User> user = new ArrayList<>();
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "linus", "Maria")) {
+    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
 
       try (Statement stmt = con.createStatement()) {
         String tableSql = "SELECT * from user";
@@ -47,6 +47,7 @@ public class UserDao implements IUserDao {
         e.printStackTrace();
         return null;
       }
+      System.out.println(user + "1");
       return user;
     } catch (Exception e) {
       e.printStackTrace();

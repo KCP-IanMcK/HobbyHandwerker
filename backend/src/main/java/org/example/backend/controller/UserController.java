@@ -28,13 +28,15 @@ public class UserController {
 
   @Produces(MediaType.APPLICATION_JSON)
   @GetMapping("/all")
-  public ResponseEntity sayHello() {
+  public ResponseEntity getAllUsers() {
     List<User> user = new ArrayList<>();
 
     user.addAll(dao.select());
     if (user.size() > 0) {
+      System.out.println(">0");
       return ResponseEntity.ok(user);
     } else {
+      System.out.println("<0");
       return ResponseEntity.notFound().build();
     }
   }
