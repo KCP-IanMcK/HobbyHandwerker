@@ -1,9 +1,10 @@
 package org.example.backend.controller;
 
-import jakarta.ws.rs.core.Response;
 import org.example.backend.models.IUserDao;
 import org.example.backend.models.User;
 import org.example.backend.models.UserDao;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,14 +23,14 @@ public class UserController {
   }
 
   @GetMapping("/all")
-  public Response sayHello() {
+  public ResponseEntity<List<User>> sayHello() {
     List<User> user = new ArrayList<>();
 
-    user.addAll(dao.select());
+//    user.addAll(dao.select());
     if (user.size() > 0) {
-      return Response.ok(user).build();
+      return ResponseEntity.ok(user);
     } else {
-      return Response.status(Response.Status.NOT_FOUND).build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
   }
 }

@@ -21,7 +21,7 @@ public class UserDao implements IUserDao {
     } catch (Exception e) {
     }
     List<User> user = new ArrayList<>();
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "u_adm", "the_password")) {
+    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "linus", "Maria")) {
 
       try (Statement stmt = con.createStatement()) {
         String tableSql = "SELECT * from user";
@@ -30,8 +30,8 @@ public class UserDao implements IUserDao {
           while (resultSet.next()) {
 
             User u = new User();
-            u.setId(resultSet.getInt("userID"));
-            u.setName(resultSet.getString("name"));
+            u.setId(resultSet.getInt("id_user"));
+            u.setName(resultSet.getString("username"));
             u.setEmail(resultSet.getString("email"));
             u.setPassword(resultSet.getString("password"));
 
