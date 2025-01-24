@@ -136,13 +136,32 @@ public class UserDao implements IUserDao {
     }
 
     try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
-      String tableSql = "UPDATE user SET username = ?, email = ?, password = ? WHERE ID_user like ?;";
+      String tableSql = "UPDATE user SET ";
+      List<Object> params = new ArrayList<>();
+      List<String> paramNames = new ArrayList<>();
+      if (user.getUsername() != null) {
+        params.add(user.getUsername());
+        paramNames.add("username");
+      }
+      if (user.getEmail() != null) {
+        params.add(user.getEmail());
+        paramNames.add("email");
+      }
+      if (user.getPassword() != null) {
+        params.add(user.getPassword());
+        paramNames.add("password");
+      }
+      for (int i = 0; i < paramNames.size() - 1; i++) {
+        tableSql += paramNames.get(i) + " = ?,";
+      }
+      tableSql += paramNames.get(paramNames.size() - 1) + " = ? ";
+      tableSql += "WHERE ID_user = ?";
+
       try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {
-        System.out.println(user.getUsername() + "2");
-        pstmt.setString(1, user.getUsername());
-        pstmt.setString(2, user.getEmail());
-        pstmt.setString(3, user.getPassword());
-        pstmt.setInt(4, ID);
+        for (int i = 0; i < params.size(); i++) {
+          pstmt.setObject(i + 1, params.get(i));
+        }
+        pstmt.setInt(params.size() + 1, ID);
         System.out.println(pstmt);
         pstmt.execute();
         count = pstmt.getUpdateCount();
