@@ -27,7 +27,7 @@ public class UserDao implements IUserDao {
           while (resultSet.next()) {
 
             User u = new User();
-            u.setIdUser(resultSet.getInt("ID_user"));
+            u.setId_user(resultSet.getInt("ID_user"));
             u.setUsername(resultSet.getString("username"));
             u.setEmail(resultSet.getString("email"));
             u.setPassword(resultSet.getString("password"));
@@ -71,7 +71,7 @@ public class UserDao implements IUserDao {
 
             while (resultSet.next()) {
               User u = new User();
-              u.setIdUser(resultSet.getInt("ID_user"));
+              u.setId_user(resultSet.getInt("ID_user"));
               u.setUsername(resultSet.getString("username"));
               u.setEmail(resultSet.getString("email"));
               u.setPassword(resultSet.getString("password"));
@@ -113,7 +113,7 @@ public class UserDao implements IUserDao {
         if (result > 0) {
           try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
             if (generatedKeys.next()) {
-              user.setIdUser(generatedKeys.getInt(1));
+              user.setId_user(generatedKeys.getInt(1));
             }
           }
           return user;
