@@ -30,11 +30,12 @@ public class UserDao implements IUserDao {
           while (resultSet.next()) {
 
             User u = new User();
-            u.setId(resultSet.getInt("id_user"));
+            u.setId(resultSet.getInt("ID_user"));
             u.setName(resultSet.getString("username"));
             u.setEmail(resultSet.getString("email"));
             u.setPassword(resultSet.getString("password"));
 
+            user.add(u);
             stmt.close();
             con.close();
           }
