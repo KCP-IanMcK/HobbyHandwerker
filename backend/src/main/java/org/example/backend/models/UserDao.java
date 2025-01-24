@@ -24,32 +24,28 @@ public class UserDao implements IUserDao {
         String tableSql = "SELECT * from user";
         try (ResultSet resultSet = stmt.executeQuery(tableSql)) {
 
-          while (resultSet.next()) {
+          resultSet.next();
 
-            User u = new User();
-            u.setId_user(resultSet.getInt("ID_user"));
-            u.setUsername(resultSet.getString("username"));
-            u.setEmail(resultSet.getString("email"));
-            u.setPassword(resultSet.getString("password"));
+          User u = new User();
+          u.setId_user(resultSet.getInt("ID_user"));
+          u.setUsername(resultSet.getString("username"));
+          u.setEmail(resultSet.getString("email"));
+          u.setPassword(resultSet.getString("password"));
 
-            user.add(u);
-          }
-          stmt.close();
-          con.close();
-        } catch (Exception e) {
-          e.printStackTrace();
-          con.close();
+          user.add(u);
         }
+        stmt.close();
+        con.close();
       } catch (Exception e) {
         e.printStackTrace();
-        return null;
+        con.close();
       }
-      System.out.println(user + "1");
-      return user;
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     }
+    System.out.println(user + "1");
+    return user;
   }
 
   @Override
@@ -103,7 +99,7 @@ public class UserDao implements IUserDao {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
     }
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "linus", "Maria")) {
+    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
 
       try (PreparedStatement stmt = con.prepareStatement("INSERT INTO user (username, email, password) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
         stmt.setString(1, user.getUsername());
@@ -161,4 +157,3 @@ public class UserDao implements IUserDao {
     return count;
   }
 }
-
