@@ -16,6 +16,7 @@ public class UserDao implements IUserDao {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
+      e.printStackTrace();
     }
     List<User> user = new ArrayList<>();
     try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
@@ -53,8 +54,8 @@ public class UserDao implements IUserDao {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
+      e.printStackTrace();
     }
-    List<User> user = new ArrayList<>();
     try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
 
       try (Statement stmt = con.createStatement()) {
@@ -65,17 +66,16 @@ public class UserDao implements IUserDao {
 
           try (ResultSet resultSet = pstmt.executeQuery()) {
 
-            while (resultSet.next()) {
-              User u = new User();
-              u.setId_user(resultSet.getInt("ID_user"));
-              u.setUsername(resultSet.getString("username"));
-              u.setEmail(resultSet.getString("email"));
-              u.setPassword(resultSet.getString("password"));
+            resultSet.next();
+            User u = new User();
+            u.setId_user(resultSet.getInt("ID_user"));
+            u.setUsername(resultSet.getString("username"));
+            u.setEmail(resultSet.getString("email"));
+            u.setPassword(resultSet.getString("password"));
 
-              stmt.close();
-              con.close();
-              return u;
-            }
+            stmt.close();
+            con.close();
+            return u;
           }
         } catch (Exception e) {
           e.printStackTrace();
@@ -94,10 +94,11 @@ public class UserDao implements IUserDao {
 
   @Override
   public User saveUser(User user) {
-    int result = 0;
+    int result;
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
+      e.printStackTrace();
     }
     try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
 
@@ -133,6 +134,7 @@ public class UserDao implements IUserDao {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
+      e.printStackTrace();
     }
 
     try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
@@ -154,7 +156,7 @@ public class UserDao implements IUserDao {
       for (int i = 0; i < paramNames.size() - 1; i++) {
         tableSql += paramNames.get(i) + " = ?,";
       }
-      tableSql += paramNames.get(paramNames.size() - 1) + " = ? ";
+      tableSql += paramNames.getLast() + " = ? ";
       tableSql += "WHERE ID_user = ?";
 
       try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {

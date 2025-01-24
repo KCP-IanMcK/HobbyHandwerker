@@ -29,7 +29,7 @@ public class UserController {
     List<User> user = new ArrayList<>();
 
     user.addAll(dao.select());
-    if (user.size() > 0) {
+    if (!user.isEmpty()) {
       System.out.println(">0");
       return ResponseEntity.ok(user);
     } else {

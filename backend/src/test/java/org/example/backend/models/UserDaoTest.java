@@ -10,7 +10,7 @@ class UserDaoTest {
   @Test
   void select() {
     IUserDao dao = new UserDao();
-    assertEquals(new User().getClass(), dao.select().getFirst().getClass());
+    assertEquals(User.class, dao.select().getFirst().getClass());
   }
 
   @Test
