@@ -2,16 +2,11 @@ package org.example.backend.controller;
 
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.example.backend.models.IUserDao;
 import org.example.backend.models.User;
 import org.example.backend.models.UserDao;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +33,30 @@ public class UserController {
     } else {
       System.out.println("<0");
       return ResponseEntity.notFound().build();
+    }
+  }
+
+  @Produces(MediaType.APPLICATION_JSON)
+  @GetMapping("/{user_id}")
+  public ResponseEntity getUserByID(@PathVariable("user_id") int user_id) {
+    User user = dao.select(user_id);
+
+    if (user != null) {
+      return ResponseEntity.ok(user);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
+  @PutMapping("/{user_id}")
+  public ResponseEntity updateUserByID(@RequestBody User user, @PathVariable("user_id") int user_id) {
+    System.out.println(user.getUsername() + "1");
+    int count = dao.update(user_id, user);
+    if(count == 1) {
+      return ResponseEntity.ok(count);
+    }
+    else {
+      return ResponseEntity.badRequest().build();
     }
   }
 }

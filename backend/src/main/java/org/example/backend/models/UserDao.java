@@ -1,10 +1,7 @@
 package org.example.backend.models;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -30,8 +27,8 @@ public class UserDao implements IUserDao {
           while (resultSet.next()) {
 
             User u = new User();
-            u.setId(resultSet.getInt("ID_user"));
-            u.setName(resultSet.getString("username"));
+            u.setIdUser(resultSet.getInt("ID_user"));
+            u.setUsername(resultSet.getString("username"));
             u.setEmail(resultSet.getString("email"));
             u.setPassword(resultSet.getString("password"));
 
@@ -57,7 +54,76 @@ public class UserDao implements IUserDao {
 
   @Override
   public User select(int ID) {
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (Exception e) {
+    }
+    List<User> user = new ArrayList<>();
+    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
+
+      try (Statement stmt = con.createStatement()) {
+        String tableSql = "SELECT * from user WHERE ID_user = ?;";
+        try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {
+
+          pstmt.setInt(1, ID);
+
+          try (ResultSet resultSet = pstmt.executeQuery()) {
+
+            while (resultSet.next()) {
+              User u = new User();
+              u.setIdUser(resultSet.getInt("ID_user"));
+              u.setUsername(resultSet.getString("username"));
+              u.setEmail(resultSet.getString("email"));
+              u.setPassword(resultSet.getString("password"));
+
+              stmt.close();
+              con.close();
+              return u;
+            }
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+          con.close();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
     return null;
+  }
+
+  @Override
+  public int update(int ID, User user) {
+    int count = 0;
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (Exception e) {
+    }
+
+    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
+      String tableSql = "UPDATE user SET username = ?, email = ?, password = ? WHERE ID_user like ?;";
+      try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {
+        System.out.println(user.getUsername() + "2");
+        pstmt.setString(1, user.getUsername());
+        pstmt.setString(2, user.getEmail());
+        pstmt.setString(3, user.getPassword());
+        pstmt.setInt(4, ID);
+        System.out.println(pstmt);
+        pstmt.execute();
+        count = pstmt.getUpdateCount();
+      } catch (Exception e) {
+        e.printStackTrace();
+        con.close();
+      }
+      return count;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return count;
   }
 }
 

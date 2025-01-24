@@ -1,35 +1,35 @@
 package org.example.backend.models;
 
 public class User {
-  private int id;
-  private String name;
+  private int idUser;
+  private String username;
   private String email;
   private String password;
 
   public User() {
   }
 
-  public User(int id, String password, String name, String email) {
-    this.id = id;
+  public User(int idUser, String password, String username, String email) {
+    this.idUser = idUser;
     this.password = password;
-    this.name = name;
+    this.username = username;
     this.email = email;
   }
 
-  public int getId() {
-    return id;
+  public int getIdUser() {
+    return idUser;
   }
 
-  public void setId(int id) {
-    this.id = id;
+  public void setIdUser(int idUser) {
+    this.idUser = idUser;
   }
 
-  public String getName() {
-    return name;
+  public String getUsername() {
+    return username;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getEmail() {
