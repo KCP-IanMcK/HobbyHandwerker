@@ -1,1 +1,40 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <h2>Profil</h2>
+
+  <div class="profile-info">
+    <img [src]="user.avatarUrl" alt="Profilbild" class="avatar" />
+
+    <div *ngIf="!editing">
+      <p><strong>Name:</strong> {{ user.name }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Bio:</strong> {{ user.bio }}</p>
+      <button (click)="toggleEdit()">Bearbeiten</button>
+      <button class="create-btn" (click)="openCreateProfile()">Neues Profil erstellen</button>
+    </div>
+
+    <div *ngIf="editing">
+      <label>
+        Name:
+        <input [(ngModel)]="user.name" />
+      </label>
+      <label>
+        Email:
+        <input [(ngModel)]="user.email" />
+      </label>
+      <label>
+        Bio:
+        <textarea [(ngModel)]="user.bio"></textarea>
+      </label>
+      <button (click)="saveProfile()">Speichern</button>
+      <button (click)="toggleEdit()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Popup -->
+<div class="modal-overlay" *ngIf="showCreateProfile">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeCreateProfile()">×</button>
+    <app-create-profile (close)="closeCreateProfile()"></app-create-profile>
+  </div>
+</div>
