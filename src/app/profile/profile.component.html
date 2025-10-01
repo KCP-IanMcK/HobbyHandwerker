@@ -1,21 +1,21 @@
-<div class="profile-container">
+<div id="profileContainer" class="profile-container">
   <h2>Profil</h2>
 
   <div class="profile-info">
     <img [src]="user.avatarUrl" alt="Profilbild" class="avatar" />
 
     <div *ngIf="!editing">
-      <p><strong>Name:</strong> {{ user.name }}</p>
+      <p id="username"><strong>Name:</strong> {{ user.name }}</p>
       <p><strong>Email:</strong> {{ user.email }}</p>
       <p><strong>Bio:</strong> {{ user.bio }}</p>
-      <button (click)="toggleEdit()">Bearbeiten</button>
-      <button class="create-btn" (click)="openCreateProfile()">Neues Profil erstellen</button>
+      <button id="editProfileButton" (click)="toggleEdit()">Bearbeiten</button>
+      <button id="createProfileButton" class="create-btn" (click)="openCreateProfile()">Neues Profil erstellen</button>
     </div>
 
-    <div *ngIf="editing">
+    <div id="editContainer" *ngIf="editing">
       <label>
         Name:
-        <input [(ngModel)]="user.name" />
+        <input id="usernameInput" [(ngModel)]="user.name" />
       </label>
       <label>
         Email:
@@ -25,8 +25,8 @@
         Bio:
         <textarea [(ngModel)]="user.bio"></textarea>
       </label>
-      <button (click)="saveProfile()">Speichern</button>
-      <button (click)="toggleEdit()">Abbrechen</button>
+      <button id="saveEditProfileButton" (click)="saveProfile()">Speichern</button>
+      <button id="closeEditProfileButton" (click)="toggleEdit()">Abbrechen</button>
     </div>
   </div>
 </div>

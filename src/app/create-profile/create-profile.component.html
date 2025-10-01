@@ -1,5 +1,5 @@
-<div class="create-profile-container">
-  <button (click)="closePopup()">Schliessen</button>
+<div id="createProfileContainer" class="create-profile-container">
+  <button id="closeCreateProfileButton" (click)="closePopup()" style="padding-right: 1rem; padding-left: 1rem;">Schliessen</button>
   <h2>Neues Profil erstellen</h2>
 
   <form (ngSubmit)="submitForm()" novalidate>
