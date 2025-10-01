@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CreateProfileComponent } from '../create-profile/create-profile.component';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, FormsModule, CreateProfileComponent],
+  standalone: true,
+  imports: [CommonModule, FormsModule, CreateProfileComponent, HttpClientModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })

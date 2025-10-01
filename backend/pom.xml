@@ -13,14 +13,14 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>3.3.3</version>
+      <version>3.5.4</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-      <version>3.3.3</version>
+      <version>3.5.4</version>
     </dependency>
 
     <dependency>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.9.2</version>
+      <version>5.12.2</version>
     </dependency>
 
     <dependency>
@@ -50,13 +50,13 @@
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>7.0.2.Final</version>
+      <version>8.0.1.Final</version>
     </dependency>
 
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
-      <version>3.0.0</version>
+      <version>3.0.2</version>
     </dependency>
 
   </dependencies>
