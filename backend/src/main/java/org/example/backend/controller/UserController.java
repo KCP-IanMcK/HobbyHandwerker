@@ -3,6 +3,7 @@ package org.example.backend.controller;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import org.example.backend.factory.DataSourceFactory;
 import org.example.backend.models.IUserDao;
 import org.example.backend.models.User;
 import org.example.backend.models.UserDao;
@@ -10,14 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-  private IUserDao dao = new UserDao();
+  private final DataSource dataSource = DataSourceFactory.getMySQLDataSource();
+  private IUserDao dao = new UserDao(dataSource);
 
   public void setDao(IUserDao dao) {
     this.dao = dao;
@@ -25,15 +27,13 @@ public class UserController {
 
   @Produces(MediaType.APPLICATION_JSON)
   @GetMapping("/all")
-  public ResponseEntity getAllUsers() {
+  public ResponseEntity<List<User>> getAllUsers() {
     List<User> user = new ArrayList<>();
 
     user.addAll(dao.select());
     if (!user.isEmpty()) {
-      System.out.println(">0");
       return ResponseEntity.ok(user);
     } else {
-      System.out.println("<0");
       return ResponseEntity.notFound().build();
     }
   }
@@ -41,7 +41,7 @@ public class UserController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @PostMapping
-  public ResponseEntity createUser(@RequestBody User user) {
+  public ResponseEntity<User> createUser(@RequestBody User user) {
     User returnedUser = dao.saveUser(user);
     if (returnedUser != null) {
       return ResponseEntity.status(HttpStatus.CREATED).body(returnedUser);
@@ -52,7 +52,7 @@ public class UserController {
 
   @Produces(MediaType.APPLICATION_JSON)
   @GetMapping("/{user_id}")
-  public ResponseEntity getUserByID(@PathVariable("user_id") int user_id) {
+  public ResponseEntity<User> getUserByID(@PathVariable("user_id") int user_id) {
     User user = dao.select(user_id);
 
     if (user != null) {
@@ -63,8 +63,7 @@ public class UserController {
   }
 
   @PutMapping("/{user_id}")
-  public ResponseEntity updateUserByID(@RequestBody User user, @PathVariable("user_id") int user_id) {
-    System.out.println(user.getUsername() + "1");
+  public ResponseEntity<Integer> updateUserByID(@RequestBody User user, @PathVariable("user_id") int user_id) {
     int count = dao.update(user_id, user);
     if(count == 1) {
       return ResponseEntity.ok(count);
