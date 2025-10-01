@@ -1,19 +1,59 @@
-<p class="titel">Jetzt registrieren und neuen Account erstellen!</p>
+<div class="create-profile-container">
+  <button (click)="closePopup()">Schliessen</button>
+  <h2>Neues Profil erstellen</h2>
 
-<div class="input">
-  <div class="username">
-    <a>Username: </a>
-    <input type="text">
-  </div>
-  <br>
-  <div class="email">
-    <a>Email: </a>
-    <input type="email">
-  </div>
-  <br>
-  <div class="password">
-    <a>Passwort: </a>
-    <input type="password">
-  </div>
-  <button class="button" type="submit">Absenden</button>
+  <form (ngSubmit)="submitForm()" novalidate>
+    <label for="name">Name:</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      required
+      [(ngModel)]="profile.name"
+      #name="ngModel"
+      [class.invalid]="name.invalid && name.touched"
+      placeholder="Dein Name"
+    />
+    <div *ngIf="name.invalid && name.touched" class="error-msg">
+      Name ist Pflicht.
+    </div>
+
+    <label for="email">Email:</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      email
+      [(ngModel)]="profile.email"
+      #email="ngModel"
+      [class.invalid]="email.invalid && email.touched"
+      placeholder="beispiel@mail.de"
+    />
+    <div *ngIf="email.invalid && email.touched" class="error-msg">
+      Bitte gültige Email eingeben.
+    </div>
+
+    <label for="bio">Bio:</label>
+    <textarea
+      id="bio"
+      name="bio"
+      rows="4"
+      [(ngModel)]="profile.bio"
+      placeholder="Erzähl etwas über dich..."
+    ></textarea>
+
+    <label for="avatarUrl">Profilbild URL:</label>
+    <input
+      type="url"
+      id="avatarUrl"
+      name="avatarUrl"
+      [(ngModel)]="profile.avatarUrl"
+      placeholder="https://example.com/avatar.jpg"
+    />
+
+    <button type="submit">Profil erstellen</button>
+  </form>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
 </div>

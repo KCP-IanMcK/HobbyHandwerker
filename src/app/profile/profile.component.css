@@ -1,0 +1,207 @@
+.profile-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.profile-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.profile-info > div {
+  flex: 1 1 250px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4a90e2;
+  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.4);
+}
+
+.profile-info p {
+  font-size: 1rem;
+  color: #444;
+  margin: 0.3rem 0;
+}
+
+.profile-info p strong {
+  color: #222;
+  width: 70px;
+  display: inline-block;
+}
+
+.profile-info button {
+  margin-top: 1rem;
+  padding: 0.45rem 1.2rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.profile-info button:hover {
+  background-color: #357ABD;
+}
+
+/* Styling für das Formular (Bearbeiten-Bereich) */
+.profile-info > div:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+input, textarea {
+  margin-top: 0.3rem;
+  padding: 0.5rem;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.6);
+}
+
+textarea {
+  min-height: 80px;
+}
+
+.profile-info > div:nth-child(3) button {
+  width: fit-content;
+  padding: 0.5rem 1.4rem;
+  background-color: #27ae60;
+  border-radius: 6px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-info > div:nth-child(3) button:hover {
+  background-color: #1e8449;
+}
+
+.profile-info > div:nth-child(3) button:last-child {
+  background-color: #e74c3c;
+  margin-left: 0.5rem;
+}
+
+.profile-info > div:nth-child(3) button:last-child:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Anpassung */
+@media (max-width: 600px) {
+  .profile-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-info > div {
+    width: 100%;
+  }
+
+  .profile-info > div:nth-child(3) {
+    flex-direction: column;
+  }
+
+  .profile-info > div:nth-child(3) button {
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+}
+
+/* Overlay: dunkler halbtransparenter Hintergrund */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Das Popup selbst */
+.modal-content {
+  background-color: white;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #4a90e2;
+}
+
+/* Button für "Neues Profil erstellen" */
+.create-btn {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  margin-left: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.create-btn:hover {
+  background-color: #357ABD;
+}

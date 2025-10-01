@@ -1,5 +1,6 @@
 package org.example.backend.models;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,9 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.sql.DriverManager.*;
-
 public class UserDao implements IUserDao {
+
+  private final DataSource dataSource;
+
+  public UserDao(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
   @Override
   public List<User> select() {
@@ -19,7 +24,7 @@ public class UserDao implements IUserDao {
       e.printStackTrace();
     }
     List<User> user = new ArrayList<>();
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
+    try (Connection con = dataSource.getConnection()) {
 
       try (Statement stmt = con.createStatement()) {
         String tableSql = "SELECT * from user";
@@ -56,7 +61,7 @@ public class UserDao implements IUserDao {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
+    try (Connection con = dataSource.getConnection()) {
 
       try (Statement stmt = con.createStatement()) {
         String tableSql = "SELECT * from user WHERE ID_user = ?;";
@@ -100,7 +105,7 @@ public class UserDao implements IUserDao {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
+    try (Connection con = dataSource.getConnection()) {
 
       try (PreparedStatement stmt = con.prepareStatement("INSERT INTO user (username, email, password) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
         stmt.setString(1, user.getUsername());
@@ -137,7 +142,7 @@ public class UserDao implements IUserDao {
       e.printStackTrace();
     }
 
-    try (Connection con = getConnection("jdbc:mysql://localhost:3306/hobbyhandwerker", "adm_user", "the_password")) {
+    try (Connection con = dataSource.getConnection()) {
       String tableSql = "UPDATE user SET ";
       List<Object> params = new ArrayList<>();
       List<String> paramNames = new ArrayList<>();

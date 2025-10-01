@@ -1,0 +1,60 @@
+.home-container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  text-align: center;
+}
+
+.home-container h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.intro-text {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.button-wrapper {
+  margin-bottom: 2rem;
+}
+
+.toggle-profile-btn {
+  background: linear-gradient(135deg, #4a90e2, #357ABD);
+  color: white;
+  padding: 0.65rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(74,144,226,0.4);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.toggle-profile-btn:hover {
+  background: linear-gradient(135deg, #357ABD, #2b5f8f);
+  transform: scale(1.05);
+}
+
+.profile-section {
+  text-align: left;
+  border-top: 2px solid #4a90e2;
+  padding-top: 1.5rem;
+}
+
+.profile-section h2 {
+  color: #4a90e2;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  font-size: 1.8rem;
+}
