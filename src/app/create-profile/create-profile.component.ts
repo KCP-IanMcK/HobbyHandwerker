@@ -21,20 +21,20 @@ export class CreateProfileComponent {
 
   message: string | null = null;
 
-  apiUrl = 'http://localhost:8080/user'; // Dein Backend-URL anpassen
+  apiUrl = 'http://localhost:8080/user';
 
   constructor(private http: HttpClient) {}
 
   submitForm(): void {
     if (!this.profile.name || !this.profile.email) {
-      return; // Validierung, aber Angular Forms macht das schon
+      return;
     }
 
     this.http.post(this.apiUrl, this.profile).subscribe({
       next: (res) => {
         this.message = 'Profil erfolgreich erstellt!';
         this.resetForm();
-        this.closePopup();  // Popup nach Erfolg schließen
+        this.closePopup();
       },
       error: (err) => {
         console.error('Fehler beim Erstellen des Profils:', err);
