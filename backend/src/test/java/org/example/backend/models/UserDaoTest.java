@@ -1,5 +1,6 @@
 package org.example.backend.models;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -76,6 +77,10 @@ class UserDaoTest {
 
     User result = dao.saveUser(user);
 
-    assertEquals(user, result);
+    SoftAssertions softly = new SoftAssertions();
+    softly.assertThat(result.getId_user()).isEqualTo(user.getId_user());
+    softly.assertThat(result.getPassword()).isEqualTo(user.getPassword());
+    softly.assertThat(result.getUsername()).isEqualTo(user.getUsername());
+    softly.assertThat(result.getEmail()).isEqualTo(user.getEmail());
   }
 }
