@@ -1,0 +1,35 @@
+.explore-container {
+background-color: lightblue;
+height: 50vh;
+padding: 2rem;
+}
+
+h1 {
+border-top: 1px solid black;
+}
+
+.tool-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.tool-card:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.tool-card h3 {
+  margin: 0 0 0.4rem 0;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.tool-card p {
+  margin: 0;
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.4;
+}

@@ -1,0 +1,7 @@
+<h1>Explorer</h1>
+<div class="explore-container">
+  <section *ngFor="let tool of availableTools" class="tool-card">
+    <h3>{{tool.name}}</h3>
+    <p>{{tool.description}}</p>
+  </section>
+</div>
