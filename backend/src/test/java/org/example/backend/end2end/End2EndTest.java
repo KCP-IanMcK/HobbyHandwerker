@@ -8,11 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -26,8 +25,15 @@ public class End2EndTest {
 
   @BeforeEach
   void setUp() {
-    WebDriverManager.firefoxdriver().setup();
-    driver = new FirefoxDriver();
+    WebDriverManager.chromedriver().setup();
+
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--headless=new");
+    options.addArguments("--disable-gpu");
+    options.addArguments("--window-size=1920,1080");
+    options.addArguments("--no-sandbox");
+
+    driver = new ChromeDriver(options);
     wait = new WebDriverWait(driver, Duration.of(15, ChronoUnit.SECONDS));
   }
 
