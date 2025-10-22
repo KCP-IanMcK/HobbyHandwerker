@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileComponent } from '../profile/profile.component';
 import { CommonModule } from '@angular/common';
+import { ExplorerComponent } from '../explorer/explorer.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProfileComponent, CommonModule],
+  imports: [ProfileComponent, CommonModule, ExplorerComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
