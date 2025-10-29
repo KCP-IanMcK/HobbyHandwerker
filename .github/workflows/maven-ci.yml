@@ -52,7 +52,7 @@ jobs:
         run: nohup mvn --file backend/pom.xml spring-boot:run &
 
       - name: Report test results
-        if: always()
+        if: always() && github.event_name == 'push'
         uses: dorny/test-reporter@v1
         with:
           name: Maven Tests
