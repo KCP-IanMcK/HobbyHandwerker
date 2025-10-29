@@ -1,0 +1,26 @@
+<div class="tool-card" *ngIf="werkzeug; else empty">
+  <header class="head">
+    <h2 class="name">{{ werkzeug.name }}</h2>
+  </header>
+
+  <p class="description" *ngIf="werkzeug.description; else noDescription">
+    {{ werkzeug.description }}
+  </p>
+
+  <div class="status-row">
+    <label>Status:</label>
+    <div class="status">{{ werkzeug.status || 'unbekannt' }}</div>
+  </div>
+
+  <div class="actions">
+    <button type="button" (click)="highlightValidated()">Als geprüft markieren</button>
+  </div>
+</div>
+
+<ng-template #noDescription>
+  <p class="muted">Keine Beschreibung vorhanden.</p>
+</ng-template>
+
+<ng-template #empty>
+  <div class="empty">Kein Werkzeug ausgewählt.</div>
+</ng-template>

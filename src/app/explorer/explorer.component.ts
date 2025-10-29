@@ -8,27 +8,26 @@ import { CommonModule } from '@angular/common';
   selector: 'app-explorer',
   imports: [CommonModule],
   templateUrl: './explorer.component.html',
-  styleUrl: './explorer.component.css'
+  styleUrls: ['./explorer.component.css']
 })
 export class ExplorerComponent implements OnInit {
 
 availableTools: ToolDto[] = [];
 
   ngOnInit() {
-    //Backend Call to get the tools
-    //For now just a demo array
-    let user = {
-      firstName: "John",
-      lastName: "Doe",
-      address: "Street 123, 1000 New City"
-    }
-    let tool1 = {
-      name: "Hammer",
+    const user: UserDto = {
+      firstName: 'John',
+      lastName: 'Doe',
+      address: 'Street 123, 1000 New City'
+    };
+
+    const tool1: ToolDto = {
+      name: 'Hammer',
       picture: undefined,
-      description: "Old trusty hammer",
+      description: 'Old trusty hammer',
       owner: user,
-      status: "available"
-     }
+      status: 'available'
+    };
 
     this.availableTools = [tool1];
   }

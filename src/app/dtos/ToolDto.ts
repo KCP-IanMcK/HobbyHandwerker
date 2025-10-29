@@ -4,6 +4,6 @@ export interface ToolDto {
     name: string;
     picture?: Blob[];
     description: string;
-    owner: UserDto;
+    owner?: UserDto;
     status: string;
 }
