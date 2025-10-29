@@ -59,4 +59,10 @@ describe('ToolDetailComponent', () => {
     component.highlightValidated();
     expect(component.tool).toBeUndefined();
   });
-});
+
+it("should call closeEventEmitter", () => {
+  spyOn(component.closePopUpEmitter, "emit");
+  component.closePopUp();
+  expect(component.closePopUpEmitter.emit).toHaveBeenCalled();
+  });
+  });
