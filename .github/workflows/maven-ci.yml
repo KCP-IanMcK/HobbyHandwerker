@@ -42,6 +42,22 @@ jobs:
       - name: Run frontend tests
         run: npm run test
 
+
+      - name: Report frontend test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Frontend Tests
+          path: frontend/test-results/junit.xml
+          reporter: java-junit
+
+      - name: Upload frontend test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-results
+          path: frontend/test-results/
+
       - name: Start frontend
         run: nohup npm start > frontend.log 2>&1 &
 
@@ -55,7 +71,7 @@ jobs:
         run: nohup mvn --file backend/pom.xml spring-boot:run &
 
       - name: Report test results
-        if: always() && github.event_name == 'push'
+        if: always()
         uses: dorny/test-reporter@v1
         with:
           name: Maven Tests
