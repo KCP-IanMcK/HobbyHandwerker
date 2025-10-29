@@ -11,7 +11,7 @@ module.exports = function(config) {
     ],
     reporters: ['progress', 'junit'],
     junitReporter: {
-      outputDir: require('path').resolve(__dirname, 'test-results'),
+      outputDir: 'frontend/test-results',
       outputFile: 'frontend.xml',
       useBrowserName: false
     },

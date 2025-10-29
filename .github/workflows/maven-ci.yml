@@ -48,7 +48,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Frontend Tests
-          path: test-results/junit.xml
+          path: frontend/test-results/frontend.xml
           reporter: java-junit
 
       - name: Upload frontend test reports
