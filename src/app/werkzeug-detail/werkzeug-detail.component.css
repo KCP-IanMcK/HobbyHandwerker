@@ -1,4 +1,4 @@
-.werkzeug-card {
+.tool-card {
   border: 1px solid #dcdcdc;
   border-radius: 8px;
   padding: 12px;
@@ -9,7 +9,7 @@
 }
 
 
-.kopf {
+.head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -29,7 +29,7 @@
 }
 
 
-.beschreibung {
+.description {
   margin: 8px 0;
   line-height: 1.35;
 }

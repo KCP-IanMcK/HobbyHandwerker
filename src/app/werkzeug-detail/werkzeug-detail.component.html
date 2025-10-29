@@ -1,9 +1,9 @@
-<div class="werkzeug-card" *ngIf="werkzeug; else leer">
-  <header class="kopf">
+<div class="tool-card" *ngIf="werkzeug; else leer">
+  <header class="head">
     <h2 class="name">{{ werkzeug.name }}</h2>
   </header>
 
-  <p class="beschreibung" *ngIf="werkzeug.description; else keineBeschreibung">
+  <p class="description" *ngIf="werkzeug.description; else keineBeschreibung">
     {{ werkzeug.description }}
   </p>
 

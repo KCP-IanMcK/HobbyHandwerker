@@ -11,12 +11,12 @@ describe('CreateProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, CreateProfileComponent], // Standalone-Komponente importieren
+      imports: [HttpClientTestingModule, CreateProfileComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateProfileComponent);
     component = fixture.componentInstance;
-    http = TestBed.inject(HttpClient); // HttpClient für Spies
+    http = TestBed.inject(HttpClient);
     fixture.detectChanges();
   });
 
@@ -25,7 +25,7 @@ describe('CreateProfileComponent', () => {
   });
 
   it('sollte Formular zurücksetzen und Erfolgsmeldung anzeigen bei erfolgreichem Submit', () => {
-    spyOn(http, 'post').and.returnValue(of({})); // Mock: Erfolgreicher Request
+    spyOn(http, 'post').and.returnValue(of({}));
 
     component.profile = { name: 'Test', email: 'test@test.com', bio: 'bio', avatarUrl: 'url' };
     component.submitForm();
