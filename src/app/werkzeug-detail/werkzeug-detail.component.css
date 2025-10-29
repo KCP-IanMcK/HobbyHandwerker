@@ -1,0 +1,73 @@
+.werkzeug-card {
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 420px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+
+.kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+
+.name {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+
+.id {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+
+.beschreibung {
+  margin: 8px 0;
+  line-height: 1.35;
+}
+
+
+.status-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+
+.status {
+  font-weight: 600;
+}
+
+
+.actions {
+  margin-top: 12px;
+}
+
+
+.actions button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #bfbfbf;
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+
+.actions button:hover {
+  filter: brightness(0.98);
+}
+
+
+.leer, .muted {
+  color: #777;
+  font-style: italic;
+}
