@@ -41,7 +41,7 @@ describe('WerkzeugDetailComponent', () => {
     expect(component.werkzeug!.name).toBe('Bohrhammer Makita');
   });
 
-  it('markiereGeprueft() sollte Status auf "verfügbar" setzen', () => {
+  it('highlightValidated() sollte Status auf "verfügbar" setzen', () => {
     const tool: ToolDto = {
       name: 'Stichsäge Bosch',
       description: 'Für präzise Holzschnitte.',
@@ -49,14 +49,14 @@ describe('WerkzeugDetailComponent', () => {
     };
 
     component.werkzeug = tool;
-    component.markiereGeprueft();
+    component.highlightValidated();
 
     expect(component.werkzeug!.status).toBe('verfügbar');
   });
 
-  it('markiereGeprueft() sollte nichts tun, wenn werkzeug null ist', () => {
+  it('highlightValidated() sollte nichts tun, wenn werkzeug null ist', () => {
     component.werkzeug = undefined;
-    component.markiereGeprueft();
+    component.highlightValidated();
     expect(component.werkzeug).toBeUndefined();
   });
 });

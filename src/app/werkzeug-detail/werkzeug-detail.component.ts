@@ -20,8 +20,7 @@ export class WerkzeugDetailComponent {
   }
 
 
-// Kleiner Hilfsbutton: markiert als geprüft
-  markiereGeprueft() {
+  highlightValidated() {
     if (!this.werkzeug) return;
     this.werkzeug.status = 'verfügbar';
   }
