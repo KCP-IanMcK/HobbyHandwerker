@@ -1,9 +1,9 @@
-<div class="tool-card" *ngIf="werkzeug; else leer">
+<div class="tool-card" *ngIf="werkzeug; else empty">
   <header class="head">
     <h2 class="name">{{ werkzeug.name }}</h2>
   </header>
 
-  <p class="description" *ngIf="werkzeug.description; else keineBeschreibung">
+  <p class="description" *ngIf="werkzeug.description; else noDescription">
     {{ werkzeug.description }}
   </p>
 
@@ -17,10 +17,10 @@
   </div>
 </div>
 
-<ng-template #keineBeschreibung>
+<ng-template #noDescription>
   <p class="muted">Keine Beschreibung vorhanden.</p>
 </ng-template>
 
-<ng-template #leer>
-  <div class="leer">Kein Werkzeug ausgewählt.</div>
+<ng-template #empty>
+  <div class="empty">Kein Werkzeug ausgewählt.</div>
 </ng-template>
