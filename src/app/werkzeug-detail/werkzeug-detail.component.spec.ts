@@ -57,6 +57,6 @@ describe('WerkzeugDetailComponent', () => {
   it('markiereGeprueft() sollte nichts tun, wenn werkzeug null ist', () => {
     component.werkzeug = undefined;
     component.markiereGeprueft();
-    expect(component.werkzeug).toBeNull();
+    expect(component.werkzeug).toBeUndefined();
   });
 });
