@@ -11,6 +11,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
 
     steps:
       - name: Checkout repository
@@ -39,14 +42,45 @@ jobs:
       - name: Run frontend tests
         run: npm run test
 
+
+      - name: Report frontend test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Frontend Tests
+          path: frontend/test-results/frontend.xml
+          reporter: java-junit
+
+      - name: Upload frontend test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-results
+          path: frontend/test-results/
+
       - name: Start frontend
         run: nohup npm start > frontend.log 2>&1 &
 
       - name: Wait for frontend to start
-        run: sleep 20
+        run: sleep 15
 
       - name: Build with Maven
         run: mvn -B package --file backend/pom.xml
 
       - name: Start backend in background with spring-boot:run
         run: nohup mvn --file backend/pom.xml spring-boot:run &
+
+      - name: Report test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Maven Tests
+          path: backend/target/surefire-reports/*.xml
+          reporter: java-junit
+
+      - name: Upload raw test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports
+          path: backend/target/surefire-reports/
