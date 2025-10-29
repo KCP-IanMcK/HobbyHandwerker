@@ -8,7 +8,7 @@ describe('WerkzeugDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WerkzeugDetailComponent],
+      imports: [WerkzeugDetailComponent], // <— wichtig: standalone-Komponente importieren!
     }).compileComponents();
 
     fixture = TestBed.createComponent(WerkzeugDetailComponent);
@@ -37,9 +37,8 @@ describe('WerkzeugDetailComponent', () => {
     component.werkzeug = customWerkzeug;
     component.ngOnInit();
 
-    // Erwartung: Keine Überschreibung durch Beispielwert
     expect(component.werkzeug).toBe(customWerkzeug);
-    expect(component.werkzeug.name).toBe('Bohrhammer Makita');
+    expect(component.werkzeug!.name).toBe('Bohrhammer Makita');
   });
 
   it('markiereGeprueft() sollte Status auf "verfügbar" setzen', () => {
@@ -52,12 +51,12 @@ describe('WerkzeugDetailComponent', () => {
     component.werkzeug = tool;
     component.markiereGeprueft();
 
-    expect(component.werkzeug.status).toBe('verfügbar');
+    expect(component.werkzeug!.status).toBe('verfügbar');
   });
 
   it('markiereGeprueft() sollte nichts tun, wenn werkzeug null ist', () => {
     component.werkzeug = undefined;
     component.markiereGeprueft();
-    expect(component.werkzeug).toBeUndefined();
+    expect(component.werkzeug).toBeNull();
   });
 });
