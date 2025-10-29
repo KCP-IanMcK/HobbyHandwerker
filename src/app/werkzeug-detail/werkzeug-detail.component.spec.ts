@@ -1,7 +1,6 @@
-/*
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { WerkzeugDetailComponent } from './werkzeug-detail.component';
+import { ToolDto } from '../dtos/ToolDto';
 
 describe('WerkzeugDetailComponent', () => {
   let component: WerkzeugDetailComponent;
@@ -9,17 +8,56 @@ describe('WerkzeugDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WerkzeugDetailComponent]
-    })
-    .compileComponents();
+      declarations: [WerkzeugDetailComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(WerkzeugDetailComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('sollte erstellt werden', () => {
     expect(component).toBeTruthy();
   });
+
+  it('sollte Beispielwert setzen, wenn kein werkzeug übergeben wurde', () => {
+    component.werkzeug = undefined;
+    component.ngOnInit();
+    expect(component.werkzeug).toBeTruthy();
+    expect(component.werkzeug!.name).toBe('Akkuschrauber Bosch GSR 12V');
+    expect(component.werkzeug!.status).toBe('in_benutzung');
+  });
+
+  it('sollte vorhandenes werkzeug beibehalten, wenn gesetzt', () => {
+    const customWerkzeug: ToolDto = {
+      name: 'Bohrhammer Makita',
+      description: 'Leistungsstarker Bohrhammer für Betonarbeiten',
+      status: 'defekt',
+    };
+
+    component.werkzeug = customWerkzeug;
+    component.ngOnInit();
+
+    // Erwartung: Keine Überschreibung durch Beispielwert
+    expect(component.werkzeug).toBe(customWerkzeug);
+    expect(component.werkzeug.name).toBe('Bohrhammer Makita');
+  });
+
+  it('markiereGeprueft() sollte Status auf "verfügbar" setzen', () => {
+    const tool: ToolDto = {
+      name: 'Stichsäge Bosch',
+      description: 'Für präzise Holzschnitte.',
+      status: 'in_benutzung',
+    };
+
+    component.werkzeug = tool;
+    component.markiereGeprueft();
+
+    expect(component.werkzeug.status).toBe('verfügbar');
+  });
+
+  it('markiereGeprueft() sollte nichts tun, wenn werkzeug null ist', () => {
+    component.werkzeug = undefined;
+    component.markiereGeprueft();
+    expect(component.werkzeug).toBeUndefined();
+  });
 });
-*/

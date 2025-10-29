@@ -7,11 +7,10 @@ import {ToolDto} from '../dtos/ToolDto';
   styleUrls: ['./werkzeug-detail.component.css']
 })
 export class WerkzeugDetailComponent {
-  @Input() werkzeug: ToolDto | null = null;
-
+  @Input() werkzeug: ToolDto | undefined;
   ngOnInit() {
     // Beispielwert – nur zu Testzwecken
-    if (!this.werkzeug) {
+    if (this.werkzeug == null) {
       this.werkzeug = {
         name: 'Akkuschrauber Bosch GSR 12V',
         description: 'Kompakter Akkuschrauber mit 2-Gang-Getriebe und LED-Licht.',
