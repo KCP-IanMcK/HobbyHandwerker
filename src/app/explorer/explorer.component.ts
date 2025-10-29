@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ToolDto } from '../dtos/ToolDto';
 import { UserDto } from '../dtos/UserDto';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-explorer',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './explorer.component.html',
   styleUrls: ['./explorer.component.css']
 })
 export class ExplorerComponent implements OnInit {
 
-  availableTools: ToolDto[] = [];
+availableTools: ToolDto[] = [];
 
   ngOnInit() {
-    // Beispiel: fiktiver Benutzer
     const user: UserDto = {
       firstName: 'John',
       lastName: 'Doe',
