@@ -50,3 +50,16 @@ jobs:
 
       - name: Start backend in background with spring-boot:run
         run: nohup mvn --file backend/pom.xml spring-boot:run &
+
+      - name: Publish Test Report
+        if: always()
+        uses: actions/upload-test-report@v1
+        with:
+          report_paths: backend/target/surefire-reports/*.xml
+
+      - name: Upload raw test results as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: backend/target/surefire-reports/
