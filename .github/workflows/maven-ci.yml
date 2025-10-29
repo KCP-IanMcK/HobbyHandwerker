@@ -43,7 +43,7 @@ jobs:
         run: nohup npm start > frontend.log 2>&1 &
 
       - name: Wait for frontend to start
-        run: sleep 20
+        run: sleep 15
 
       - name: Build with Maven
         run: mvn -B package --file backend/pom.xml
