@@ -1,31 +1,25 @@
 <div class="werkzeug-card" *ngIf="werkzeug; else leer">
   <header class="kopf">
     <h2 class="name">{{ werkzeug.name }}</h2>
-    <span class="id">ID: {{ werkzeug.id }}</span>
   </header>
 
-
-  <p class="beschreibung" *ngIf="werkzeug.beschreibung; else keineBeschreibung">
-    {{ werkzeug.beschreibung }}
+  <p class="beschreibung" *ngIf="werkzeug.description; else keineBeschreibung">
+    {{ werkzeug.description }}
   </p>
 
-
   <div class="status-row">
-    <label>Status</label>
+    <label>Status:</label>
     <div class="status">{{ werkzeug.status || 'unbekannt' }}</div>
   </div>
-
 
   <div class="actions">
     <button type="button" (click)="markiereGeprueft()">Als geprüft markieren</button>
   </div>
 </div>
 
-
 <ng-template #keineBeschreibung>
   <p class="muted">Keine Beschreibung vorhanden.</p>
 </ng-template>
-
 
 <ng-template #leer>
   <div class="leer">Kein Werkzeug ausgewählt.</div>

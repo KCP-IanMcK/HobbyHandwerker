@@ -1,13 +1,5 @@
 import { Component, Input } from '@angular/core';
-
-
-export interface Werkzeug {
-  id: number;
-  name: string;
-  beschreibung?: string;
-  status?: 'verfügbar' | 'in_benutzung' | 'wartung' | string;
-}
-
+import {ToolDto} from '../dtos/ToolDto';
 
 @Component({
   selector: 'app-werkzeug-detail',
@@ -15,7 +7,18 @@ export interface Werkzeug {
   styleUrls: ['./werkzeug-detail.component.css']
 })
 export class WerkzeugDetailComponent {
-  @Input() werkzeug: Werkzeug | null = null;
+  @Input() werkzeug: ToolDto | null = null;
+
+  ngOnInit() {
+    // Beispielwert – nur zu Testzwecken
+    if (!this.werkzeug) {
+      this.werkzeug = {
+        name: 'Akkuschrauber Bosch GSR 12V',
+        description: 'Kompakter Akkuschrauber mit 2-Gang-Getriebe und LED-Licht.',
+        status: 'in_benutzung'
+      };
+    }
+  }
 
 
 // Kleiner Hilfsbutton: markiert als geprüft
