@@ -3,16 +3,20 @@ import { ToolDto } from '../dtos/ToolDto';
 import { UserDto } from '../dtos/UserDto';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {ToolDetailComponent} from '../tool-detail/tool-detail.component';
+
 
 @Component({
   selector: 'app-explorer',
-  imports: [CommonModule],
+  imports: [CommonModule, ToolDetailComponent],
   templateUrl: './explorer.component.html',
   styleUrls: ['./explorer.component.css']
 })
 export class ExplorerComponent implements OnInit {
 
 availableTools: ToolDto[] = [];
+toolToShow: ToolDto = {name: "", description: "", status: ""};
+showToolDetailCard: boolean = false;
 
   ngOnInit() {
     const user: UserDto = {
@@ -30,5 +34,14 @@ availableTools: ToolDto[] = [];
     };
 
     this.availableTools = [tool1];
+  }
+
+  toggleToolDetails(tool: ToolDto): void {
+      this.showToolDetailCard = !this.showToolDetailCard;
+      if (this.showToolDetailCard) {
+          this.toolToShow = tool;
+      } else {
+          this.toolToShow = {name: "", description: "", status: ""};
+     }
   }
 }

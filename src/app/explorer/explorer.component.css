@@ -8,6 +8,14 @@ h1 {
 border-top: 1px solid black;
 }
 
+.detail-tool-card {
+ position: absolute;
+ height: 95vh;
+ width: 95vw;
+ top: 1rem;
+ left: 1rem;
+}
+
 .tool-card {
   background-color: white;
   border-radius: 8px;

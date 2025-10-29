@@ -1,7 +1,13 @@
 <h1>Explorer</h1>
 <div class="explore-container">
-  <section *ngFor="let tool of availableTools" class="tool-card">
-    <h3>{{tool.name}}</h3>
-    <p>{{tool.description}}</p>
-  </section>
+    <section *ngFor="let tool of availableTools" class="tool-card">
+        <div (click)="toggleToolDetails(tool)">
+            <h3>{{tool.name}}</h3>
+            <p>{{tool.description}}</p>
+        </div>
+    </section>
+</div>
+
+<div *ngIf="showToolDetailCard && toolToShow.name" class="detail-tool-card">
+    <app-tool-detail [tool]="toolToShow" (closePopUpEmitter)="toggleToolDetails(toolToShow)"></app-tool-detail>
 </div>
