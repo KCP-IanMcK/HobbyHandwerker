@@ -15,11 +15,11 @@ describe('ToolDetailComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('sollte erstellt werden', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it('sollte Beispielwert setzen, wenn kein tool übergeben wurde', () => {
+  it('should show example data when no tool is handed over', () => {
     component.tool = undefined;
     component.ngOnInit();
     expect(component.tool).toBeTruthy();
@@ -27,7 +27,7 @@ describe('ToolDetailComponent', () => {
     expect(component.tool!.status).toBe('in_benutzung');
   });
 
-  it('sollte vorhandenes tool beibehalten, wenn gesetzt', () => {
+  it('should contain tool when it is set', () => {
     const customTool: ToolDto = {
       name: 'Bohrhammer Makita',
       description: 'Leistungsstarker Bohrhammer für Betonarbeiten',
@@ -41,7 +41,7 @@ describe('ToolDetailComponent', () => {
     expect(component.tool!.name).toBe('Bohrhammer Makita');
   });
 
-  it('highlightValidated() sollte Status auf "verfügbar" setzen', () => {
+  it('should set status to "verfügbar"', () => {
     const tool: ToolDto = {
       name: 'Stichsäge Bosch',
       description: 'Für präzise Holzschnitte.',
@@ -54,7 +54,7 @@ describe('ToolDetailComponent', () => {
     expect(component.tool!.status).toBe('verfügbar');
   });
 
-  it('highlightValidated() sollte nichts tun, wenn tool null ist', () => {
+  it('should do nothing when tool is null', () => {
     component.tool = undefined;
     component.highlightValidated();
     expect(component.tool).toBeUndefined();
