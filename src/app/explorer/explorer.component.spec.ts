@@ -20,4 +20,9 @@ describe('ExplorerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
+
+it("should toggle showToolDetailCard", () => {
+  component.toggleToolDetails({name: "", description: "", status: ""});
+  expect(component.showToolDetailCard).toBeTrue();
+  });
+  });

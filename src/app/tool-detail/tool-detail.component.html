@@ -1,15 +1,16 @@
-<div class="tool-card" *ngIf="werkzeug; else empty">
+<div class="tool-card" *ngIf="tool; else empty">
   <header class="head">
-    <h2 class="name">{{ werkzeug.name }}</h2>
+    <h2 class="name">{{ tool?.name }}</h2>
+    <button (click)="closePopUp()">Schliessen</button>
   </header>
 
-  <p class="description" *ngIf="werkzeug.description; else noDescription">
-    {{ werkzeug.description }}
+  <p class="description" *ngIf="tool.description; else noDescription">
+    {{ tool?.description }}
   </p>
 
   <div class="status-row">
     <label>Status:</label>
-    <div class="status">{{ werkzeug.status || 'unbekannt' }}</div>
+    <div class="status">{{ tool?.status || 'unbekannt' }}</div>
   </div>
 
   <div class="actions">
@@ -22,5 +23,5 @@
 </ng-template>
 
 <ng-template #empty>
-  <div class="empty">Kein Werkzeug ausgewählt.</div>
+  <div class="empty">Kein tool ausgewählt.</div>
 </ng-template>
