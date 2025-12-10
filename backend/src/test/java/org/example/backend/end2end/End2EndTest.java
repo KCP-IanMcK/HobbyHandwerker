@@ -33,8 +33,7 @@ public class End2EndTest {
     options.addArguments("--window-size=1920,1080");
     options.addArguments("--no-sandbox");
 
-    //driver = new ChromeDriver(options);
-    driver = new ChromeDriver();
+    driver = new ChromeDriver(options);
     wait = new WebDriverWait(driver, Duration.of(15, ChronoUnit.SECONDS));
   }
 
