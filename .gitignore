@@ -42,3 +42,5 @@ testem.log
 Thumbs.db
 
 DB/.env
+
+/backend/src/main/resources/application.properties

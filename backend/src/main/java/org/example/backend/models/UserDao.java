@@ -36,7 +36,6 @@ public class UserDao implements IUserDao {
           u.setId_user(resultSet.getInt("ID_user"));
           u.setUsername(resultSet.getString("username"));
           u.setEmail(resultSet.getString("email"));
-          u.setPassword(resultSet.getString("password"));
           u.setRole(resultSet.getInt("FS_Role"));
 
           user.add(u);
@@ -184,5 +183,45 @@ public class UserDao implements IUserDao {
       e.printStackTrace();
     }
     return count;
+  }
+
+  @Override
+  public User login(String username, String passwordSha) {
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    List<User> user = new ArrayList<>();
+    try (Connection con = dataSource.getConnection()) {
+      try (Statement stmt = con.createStatement()) {
+        String tableSql = "SELECT * FROM user where username = ? and password = ?;";
+        try (ResultSet resultSet = stmt.executeQuery(tableSql)) {
+
+          resultSet.next();
+
+          User u = new User();
+          u.setId_user(resultSet.getInt("ID_user"));
+          u.setUsername(resultSet.getString("username"));
+          u.setEmail(resultSet.getString("email"));
+          u.setRole(resultSet.getInt("FS_Role"));
+
+          user.add(u);
+        }
+        stmt.close();
+        con.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+        con.close();
+      }
+      if (!user.isEmpty()) {
+        return user.getFirst();
+      } else {
+        return null;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
