@@ -1,66 +1,35 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
     TestBed.configureTestingModule({
-      imports: [LoginComponent],
-      providers: [{ provide: Router, useValue: routerSpy }]
+      imports: [LoginComponent, HttpClientTestingModule]
     });
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+
+    // LocalStorage mocken
+    spyOn(localStorage, 'setItem').and.callFake(() => {});
   });
 
-  it('should navigate to /home when username=admin and password=1234', () => {
-    component.username = 'admin';
-    component.password = '1234';
-
-    component.onSubmit();
-
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/home']);
+  afterEach(() => {
+    httpMock.verify();
   });
 
-  it('should show alert when credentials are incorrect', () => {
-    spyOn(window, 'alert');
+  it('should emit cancel event on onCancel', () => {
+    let emitted = false;
+    component.cancel.subscribe(() => emitted = true);
 
-    component.username = 'user';
-    component.password = 'wrong';
+    component.onCancel();
 
-    component.onSubmit();
-
-    expect(window.alert).toHaveBeenCalledWith('Incorrect credentials. Please try again.');
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
-  });
-
-  it('should not navigate if only username is correct but password wrong', () => {
-    spyOn(window, 'alert');
-
-    component.username = 'admin';
-    component.password = 'wrong';
-
-    component.onSubmit();
-
-    expect(window.alert).toHaveBeenCalled();
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
-  });
-
-  it('should not navigate if only password is correct but username wrong', () => {
-    spyOn(window, 'alert');
-
-    component.username = 'user';
-    component.password = '1234';
-
-    component.onSubmit();
-
-    expect(window.alert).toHaveBeenCalled();
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
+    expect(emitted).toBeTrue();
   });
 });
