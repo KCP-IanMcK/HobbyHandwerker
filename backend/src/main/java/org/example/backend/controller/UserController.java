@@ -28,7 +28,7 @@ public class UserController {
   private IUserDao dao = new UserDao(dataSource);
 
   @Value("${jwt.secret}")
-  private String jwtSecret;
+  String jwtSecret;
 
   public void setDao(IUserDao dao) {
     this.dao = dao;

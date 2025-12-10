@@ -3,7 +3,6 @@ package org.example.backend.controller;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.checkerframework.checker.units.qual.A;
 import org.example.backend.models.AuthResponse;
 import org.example.backend.models.User;
 import org.example.backend.models.UserDao;
