@@ -33,7 +33,8 @@ public class End2EndTest {
     options.addArguments("--window-size=1920,1080");
     options.addArguments("--no-sandbox");
 
-    driver = new ChromeDriver(options);
+    //driver = new ChromeDriver(options);
+    driver = new ChromeDriver();
     wait = new WebDriverWait(driver, Duration.of(15, ChronoUnit.SECONDS));
   }
 
@@ -55,8 +56,106 @@ public class End2EndTest {
 
   @Test
   @Order(2)
-  void testShowProfileButton() {
+  void testCreateProfile() {
     driver.get("http://localhost:4200");
+
+    WebElement createProfileButton = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("createProfileButton"))
+    );
+
+    createProfileButton.click();
+
+    WebElement createProfileContainer = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("createProfileContainer"))
+    );
+
+    assertTrue(createProfileContainer.isDisplayed());
+
+    WebElement closeCreateProfileButton = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("closeCreateProfileButton"))
+    );
+
+    closeCreateProfileButton.click();
+
+    assertTrue(driver.findElements(By.id("closeCreateProfileButton")).isEmpty());
+  }
+
+  @Test
+  @Order(3)
+  void testLoginButton() {
+    driver.get("http://localhost:4200");
+
+    WebElement loginButton = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginButton"))
+    );
+
+    loginButton.click();
+
+    WebElement loginContainer = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginContainer"))
+    );
+
+    assertTrue(loginContainer.isDisplayed());
+
+    WebElement loginCancel = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginCancel"))
+    );
+
+    loginCancel.click();
+
+    WebElement homeContainer = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("homeContainer"))
+    );
+
+    assertTrue(homeContainer.isDisplayed());
+  }
+
+  @Test
+  @Order(4)
+  void testLogin() {
+    driver.get("http://localhost:4200");
+
+    WebElement loginButton = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginButton"))
+    );
+
+    loginButton.click();
+
+    WebElement loginContainer = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginContainer"))
+    );
+
+    wait.until(ExpectedConditions.visibilityOf(loginContainer));
+
+    WebElement loginUsername = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginUsername"))
+    );
+
+    WebElement loginPassword = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginPassword"))
+    );
+
+    loginUsername.sendKeys("dummy2");
+    loginPassword.sendKeys("Pass2");
+
+    WebElement loginSubmit = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("loginSubmit"))
+    );
+
+    loginSubmit.click();
+
+    WebElement homeContainer = wait.until(
+      ExpectedConditions.elementToBeClickable(By.id("homeContainer"))
+    );
+
+    assertTrue(homeContainer.isDisplayed());
+  }
+
+  @Test
+  @Order(5)
+  void testShowProfileButton() {
+    testLogin();
+    driver.navigate().refresh();
 
     WebElement showProfileButton = wait.until(
       ExpectedConditions.elementToBeClickable(By.id("showProfileButton"))
@@ -72,9 +171,10 @@ public class End2EndTest {
   }
 
   @Test
-  @Order(3)
+  @Order(6)
   void testEditProfile() {
-    driver.get("http://localhost:4200");
+    testLogin();
+    driver.navigate().refresh();
 
     WebElement showProfileButton = wait.until(
       ExpectedConditions.elementToBeClickable(By.id("showProfileButton"))
@@ -110,38 +210,6 @@ public class End2EndTest {
       ExpectedConditions.elementToBeClickable(By.id("username"))
     );
 
-    assertEquals("Name: Max" , username.getText());
-  }
-
-  @Test
-  @Order(4)
-  void testCreateProfile() {
-    driver.get("http://localhost:4200");
-
-    WebElement showProfileButton = wait.until(
-      ExpectedConditions.elementToBeClickable(By.id("showProfileButton"))
-    );
-
-    showProfileButton.click();
-
-    WebElement createProfileButton = wait.until(
-      ExpectedConditions.elementToBeClickable(By.id("createProfileButton"))
-    );
-
-    createProfileButton.click();
-
-    WebElement createProfileContainer = wait.until(
-      ExpectedConditions.elementToBeClickable(By.id("createProfileContainer"))
-    );
-
-    assertTrue(createProfileContainer.isDisplayed());
-
-    WebElement closeCreateProfileButton = wait.until(
-      ExpectedConditions.elementToBeClickable(By.id("closeCreateProfileButton"))
-    );
-
-    closeCreateProfileButton.click();
-
-    assertTrue(driver.findElements(By.id("closeCreateProfileButton")).isEmpty());
+    assertEquals("Name: dummy2" , username.getText());
   }
 }

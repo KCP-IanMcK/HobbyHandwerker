@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
   };
 
   showCreateProfile: boolean = false;
+  userBeforeEdit: any = null;
 
   editing: boolean = false;
   apiUrl = 'http://localhost:8080/user';
@@ -58,10 +59,16 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  toggleEdit(): void {
+  openEdit(): void {
     this.errorMessage = null; // Fehler beim Starten der Bearbeitung löschen
-    this.editing = !this.editing;
+    this.userBeforeEdit = { ...this.user };
+    this.editing = true;
   }
+
+  closeEdit(): void {
+    this.user = this.userBeforeEdit;
+    this.editing = false;
+   }
 
   saveProfile(): void {
     console.log(this.user);

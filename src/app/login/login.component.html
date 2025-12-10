@@ -1,8 +1,9 @@
-<div class="login-container">
+<div id="loginContainer" class="login-container">
   <h2>Willkommen zurück</h2>
   <form (ngSubmit)="onSubmit()">
     <div>
       <input
+        id="loginUsername"
         type="text"
         placeholder="Benutzername"
         [(ngModel)]="username"
@@ -13,6 +14,7 @@
 
     <div>
       <input
+        id="loginPassword"
         type="password"
         placeholder="Passwort"
         [(ngModel)]="password"
@@ -22,8 +24,8 @@
     </div>
 
     <div class="button-group">
-      <button type="submit">Login</button>
-      <button type="button" (click)="onCancel()">Abbrechen</button>
+      <button id="loginSubmit" type="submit">Login</button>
+      <button id="loginCancel" type="button" (click)="onCancel()">Abbrechen</button>
     </div>
   </form>
 

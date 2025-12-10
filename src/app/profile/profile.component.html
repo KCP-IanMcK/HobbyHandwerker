@@ -7,7 +7,7 @@
     <div *ngIf="!editing">
       <p id="username"><strong>Name:</strong> {{ user.username }}</p>
       <p><strong>Email:</strong> {{ user.email }}</p>
-      <button id="editProfileButton" (click)="toggleEdit()">Bearbeiten</button>
+      <button id="editProfileButton" (click)="openEdit()">Bearbeiten</button>
     </div>
 
     <div id="editContainer" *ngIf="editing">
@@ -20,7 +20,7 @@
         <input [(ngModel)]="user.email" />
       </label>
       <button id="saveEditProfileButton" (click)="saveProfile()">Speichern</button>
-      <button id="closeEditProfileButton" (click)="toggleEdit()">Abbrechen</button>
+      <button id="closeEditProfileButton" (click)="closeEdit()">Abbrechen</button>
     </div>
   </div>
 </div>
