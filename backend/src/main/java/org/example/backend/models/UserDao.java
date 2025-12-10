@@ -37,6 +37,7 @@ public class UserDao implements IUserDao {
           u.setUsername(resultSet.getString("username"));
           u.setEmail(resultSet.getString("email"));
           u.setPassword(resultSet.getString("password"));
+          u.setRole(resultSet.getInt("FS_Role"));
 
           user.add(u);
         }
@@ -77,6 +78,7 @@ public class UserDao implements IUserDao {
             u.setUsername(resultSet.getString("username"));
             u.setEmail(resultSet.getString("email"));
             u.setPassword(resultSet.getString("password"));
+            u.setRole(resultSet.getInt("FS_Role"));
 
             stmt.close();
             con.close();
@@ -107,10 +109,11 @@ public class UserDao implements IUserDao {
     }
     try (Connection con = dataSource.getConnection()) {
 
-      try (PreparedStatement stmt = con.prepareStatement("INSERT INTO user (username, email, password) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+      try (PreparedStatement stmt = con.prepareStatement("INSERT INTO user (username, email, password, FS_Role) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
         stmt.setString(1, user.getUsername());
         stmt.setString(2, user.getEmail());
         stmt.setString(3, user.getPassword());
+        stmt.setInt(4, 2); //Role "user"
         result = stmt.executeUpdate();
         if (result > 0) {
           try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
