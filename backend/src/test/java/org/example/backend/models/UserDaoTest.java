@@ -67,13 +67,13 @@ class UserDaoTest {
   @Test
   void update() {
     int id = 1;
-    User user = new User(1, "1234", "Hans", "hans@email.com");
+    User user = new User(1, 2, "1234", "hans@email.com", "Hans");
     assertEquals(1, dao.update(id, user));
   }
 
   @Test
   void insert() {
-    User user = new User(2, "1234", "Anna", "anna@email.com");
+    User user = new User(2, 2, "1234", "anna@email.com", "Anna");
 
     User result = dao.saveUser(user);
 

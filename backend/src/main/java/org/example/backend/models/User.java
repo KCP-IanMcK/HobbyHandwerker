@@ -5,15 +5,25 @@ public class User {
   private String username;
   private String email;
   private String password;
+  private int role;
 
   public User() {
   }
 
-  public User(int id_user, String password, String username, String email) {
+  public User(int id_user, int role, String password, String email, String username) {
     this.id_user = id_user;
+    this.role = role;
     this.password = password;
-    this.username = username;
     this.email = email;
+    this.username = username;
+  }
+
+  public int getRole() {
+    return role;
+  }
+
+  public void setRole(int role) {
+    this.role = role;
   }
 
   public int getId_user() {
