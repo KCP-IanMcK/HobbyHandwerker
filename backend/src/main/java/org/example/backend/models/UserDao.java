@@ -185,4 +185,39 @@ public class UserDao implements IUserDao {
     }
     return count;
   }
+
+  @Override
+  public User login(String username, String password) {
+    try {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    try (Connection con = dataSource.getConnection()) {
+      // SECURITY WARNING: In a real production app, passwords should be hashed (e.g., BCrypt).
+      // Currently, we are comparing plain text as per your existing database structure.
+      String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+
+      try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        pstmt.setString(1, username);
+        pstmt.setString(2, password);
+
+        try (ResultSet resultSet = pstmt.executeQuery()) {
+          if (resultSet.next()) {
+            User u = new User();
+            u.setId_user(resultSet.getInt("ID_user"));
+            u.setUsername(resultSet.getString("username"));
+            u.setEmail(resultSet.getString("email"));
+            // Do not return the password to the frontend for security
+            u.setRole(resultSet.getInt("FS_Role"));
+            return u;
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }

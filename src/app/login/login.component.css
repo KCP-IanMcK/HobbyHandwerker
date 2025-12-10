@@ -1,39 +1,86 @@
-body {
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f4f4f4;
-}
-
 .login-container {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
   text-align: center;
 }
 
+.login-container h2 {
+  margin-bottom: 2rem;
+  color: #4a90e2;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: left;
+}
+
 input {
-  width: 80%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: inherit;
+  box-sizing: border-box; /* Ensures padding doesn't break width */
 }
 
-button {
-  width: 88%;
-  padding: 10px;
-  background: #28a745;
-  border: none;
+input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.5);
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+button[type="submit"] {
+  flex: 2;
+  background-color: #4a90e2;
   color: white;
-  border-radius: 5px;
+  font-weight: 700;
+  border: none;
+  padding: 0.8rem 0;
+  border-radius: 30px;
+  font-size: 1.1rem;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
-  background: #218838;
+button[type="submit"]:hover {
+  background-color: #357abd;
+  transform: translateY(-2px);
+}
+
+button[type="button"] {
+  flex: 1;
+  background-color: transparent;
+  color: #666;
+  font-weight: 600;
+  border: 2px solid #ddd;
+  padding: 0.8rem 0;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button[type="button"]:hover {
+  border-color: #999;
+  color: #333;
+  background-color: #f4f4f4;
 }
