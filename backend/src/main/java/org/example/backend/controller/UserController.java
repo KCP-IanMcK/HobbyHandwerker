@@ -126,4 +126,15 @@ public class UserController {
       return ResponseEntity.badRequest().build();
     }
   }
+
+  @PostMapping("/login")
+  public ResponseEntity<User> login(@RequestBody User loginUser) {
+    User user = dao.login(loginUser.getUsername(), loginUser.getPassword());
+
+    if (user != null) {
+      return ResponseEntity.ok(user);
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+  }
 }
