@@ -4,9 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 import org.example.backend.factory.DataSourceFactory;
 import org.example.backend.models.AuthResponse;
 import org.example.backend.models.IUserDao;
@@ -26,17 +23,17 @@ import java.util.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
   private final DataSource dataSource = DataSourceFactory.getMySQLDataSource();
   private IUserDao dao = new UserDao(dataSource);
 
   @Value("${jwt.secret}")
-  String jwtSecret;
+  private String jwtSecret;
 
   public void setDao(IUserDao dao) {
     this.dao = dao;
   }
 
-  @Produces(MediaType.APPLICATION_JSON)
   @GetMapping("/all")
   public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String authHeader) {
     String token = authHeader.replace("Bearer ", "");
@@ -47,22 +44,18 @@ public class UserController {
       .parseClaimsJws(token)
       .getBody();
     int role = claims.get("role", Integer.class);
-    if(role != 2 && role != 3) {
+    if (role != 2 && role != 3) { // user oder admin
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    List<User> user = new ArrayList<>();
-
-    user.addAll(dao.select());
-    if (!user.isEmpty()) {
-      return ResponseEntity.ok(user);
+    List<User> users = dao.select();
+    if (!users.isEmpty()) {
+      return ResponseEntity.ok(users);
     } else {
       return ResponseEntity.notFound().build();
     }
   }
 
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
   @PostMapping
   public ResponseEntity<User> createUser(@RequestBody User user) {
     User returnedUser = dao.saveUser(user);
@@ -73,11 +66,9 @@ public class UserController {
     }
   }
 
-  @Produces(MediaType.APPLICATION_JSON)
   @GetMapping("/{user_id}")
   public ResponseEntity<User> getUserByID(@PathVariable("user_id") int user_id) {
     User user = dao.select(user_id);
-
     if (user != null) {
       return ResponseEntity.ok(user);
     } else {
@@ -86,7 +77,9 @@ public class UserController {
   }
 
   @PutMapping("/{user_id}")
-  public ResponseEntity<Integer> updateUserByID(@RequestHeader("Authorization") String authHeader, @RequestBody User user, @PathVariable("user_id") int user_id) {
+  public ResponseEntity<Integer> updateUserByID(@RequestHeader("Authorization") String authHeader,
+                                                @RequestBody User user,
+                                                @PathVariable("user_id") int user_id) {
     String token = authHeader.replace("Bearer ", "");
     Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     Claims claims = Jwts.parserBuilder()
@@ -98,7 +91,7 @@ public class UserController {
     int role = claims.get("role", Integer.class);
     int userId = claims.get("userId", Integer.class);
 
-    if(!(role == 2 && userId == user.getId_user()) && role != 3) {
+    if (!(role == 2 && userId == user.getId_user()) && role != 3) { // user oder admin
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
@@ -112,14 +105,13 @@ public class UserController {
 
   @PutMapping("/login")
   public ResponseEntity<AuthResponse> loginByUsernameAndPassword(@RequestBody User user) {
-    User logedInUser = dao.login(user.getUsername(), user.getPassword());
+    User loggedInUser = dao.login(user.getUsername(), user.getPassword());
 
-    if (logedInUser != null) {
+    if (loggedInUser != null) {
       Map<String, Object> claims = new HashMap<>();
-      claims.put("userId", user.getId_user());
-      claims.put("username", user.getUsername());
-      claims.put("role", user.getRole());
-
+      claims.put("userId", loggedInUser.getId_user());
+      claims.put("username", loggedInUser.getUsername());
+      claims.put("role", loggedInUser.getRole());
 
       Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
@@ -129,7 +121,7 @@ public class UserController {
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
         .signWith(secretKey, SignatureAlgorithm.HS256)
         .compact();
-      return ResponseEntity.ok(new AuthResponse(token, logedInUser));
+      return ResponseEntity.ok(new AuthResponse(token, loggedInUser));
     } else {
       return ResponseEntity.badRequest().build();
     }
