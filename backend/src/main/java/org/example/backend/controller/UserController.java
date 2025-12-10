@@ -67,7 +67,27 @@ public class UserController {
   }
 
   @GetMapping("/{user_id}")
-  public ResponseEntity<User> getUserByID(@PathVariable("user_id") int user_id) {
+  public ResponseEntity<User> getUserByID(@RequestHeader("Authorization") String authHeader, @PathVariable("user_id") int user_id) {
+    String token = authHeader.replace("Bearer ", "");
+    Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    Claims claims = Jwts.parserBuilder()
+      .setSigningKey(secretKey)
+      .build()
+      .parseClaimsJws(token)
+      .getBody();
+
+    int role = claims.get("role", Integer.class);
+    int userId = claims.get("userId", Integer.class);
+
+    if (!(role == 2 && userId == user_id) && role != 3) { // user or admin
+      User user = dao.select(1); //visitor
+      if (user != null) {
+        return ResponseEntity.ok(user);
+      } else {
+        return ResponseEntity.notFound().build();
+      }
+    }
+
     User user = dao.select(user_id);
     if (user != null) {
       return ResponseEntity.ok(user);
@@ -124,17 +144,6 @@ public class UserController {
       return ResponseEntity.ok(new AuthResponse(token, loggedInUser));
     } else {
       return ResponseEntity.badRequest().build();
-    }
-  }
-
-  @PostMapping("/login")
-  public ResponseEntity<User> login(@RequestBody User loginUser) {
-    User user = dao.login(loginUser.getUsername(), loginUser.getPassword());
-
-    if (user != null) {
-      return ResponseEntity.ok(user);
-    } else {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
   }
 }

@@ -31,13 +31,21 @@ export class LoginComponent {
       password: this.password
     };
 
-    // Make sure your Backend is running and has the /login endpoint!
-    this.http.post<any>('http://localhost:8080/user/login', loginData).subscribe({
-      next: (user) => {
-        console.log('Login successful', user);
-        localStorage.setItem('loggedInUserId', user.id_user);
+    this.http.put<any>('http://localhost:8080/user/login', loginData).subscribe({
+      next: (response) => {
+        const token = response.token;
+        const user = response.user;
 
-        // Notify the parent (Home) that we are finished
+        // Token speichern (für spätere Requests)
+        localStorage.setItem('jwtToken', token);
+
+        // Benutzer ID speichern
+        localStorage.setItem('loggedInUserId', user.id_user.toString());
+
+        // Role speichern (optional)
+        localStorage.setItem('role', user.role.toString());
+
+        // Parent informieren
         this.loginSuccess.emit();
       },
       error: (error) => {
@@ -46,6 +54,7 @@ export class LoginComponent {
       }
     });
   }
+
 
   onCancel() {
     this.cancel.emit();

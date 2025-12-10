@@ -95,7 +95,7 @@ class UserControllerTest {
     when(userDao.select(1)).thenReturn(user1);
     ResponseEntity<User> expectedResult = ResponseEntity.ok().body(user1);
 
-    var result = userController.getUserByID(1);
+    var result = userController.getUserByID(adminToken, 1);
 
     assertEquals(expectedResult, result);
   }

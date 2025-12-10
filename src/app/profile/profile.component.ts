@@ -13,10 +13,9 @@ import { CreateProfileComponent } from '../create-profile/create-profile.compone
 })
 export class ProfileComponent implements OnInit {
   user = {
-    id: 1,
-    name: '',
+    id_user: 1,
+    username: '',
     email: '',
-    bio: '',
     avatarUrl: 'https://via.placeholder.com/150'
   };
 
@@ -36,18 +35,25 @@ export class ProfileComponent implements OnInit {
   }
 
   loadUser(): void {
-    this.errorMessage = null; // Fehler vorher löschen
-    this.http.get<any>(`${this.apiUrl}/${this.user.id}`).subscribe({
+    const userId = localStorage.getItem("loggedInUserId") ?? "1";
+    const token = localStorage.getItem("jwtToken");
+
+    const options = token
+      ? { headers: { Authorization: "Bearer " + token } }
+      : {};
+
+    this.errorMessage = null;
+
+    this.http.get<any>(`${this.apiUrl}/${userId}`, options).subscribe({
       next: (data) => {
-        this.user.name = data.name;
+        this.user.id_user = data.id_user;
+        this.user.username = data.username;
         this.user.email = data.email;
-        this.user.bio = data.bio;
         this.user.avatarUrl = data.avatarUrl || this.user.avatarUrl;
       },
       error: (err) => {
-        console.error('Fehler beim Laden des Users:', err);
-        this.errorMessage = 'Das Profil konnte nicht geladen werden. Bitte versuche es später erneut.';
-        // UI bleibt nutzbar, App läuft weiter
+        console.error("Fehler beim Laden des Users:", err);
+        this.errorMessage = "Das Profil konnte nicht geladen werden. Bitte versuche es später erneut.";
       }
     });
   }
@@ -58,9 +64,14 @@ export class ProfileComponent implements OnInit {
   }
 
   saveProfile(): void {
+    console.log(this.user);
+    const userId = localStorage.getItem("loggedInUserId") ?? "1";
+        const token = localStorage.getItem("jwtToken");
+        const options = { headers: { Authorization: "Bearer " + token } }
+
     this.errorMessage = null;
     this.saving = true;
-    this.http.put(`${this.apiUrl}/${this.user.id}`, this.user).subscribe({
+    this.http.put(`${this.apiUrl}/${this.user.id_user}`, this.user, options).subscribe({
       next: () => {
         console.log('Profil gespeichert:', this.user);
         this.editing = false;
@@ -72,14 +83,6 @@ export class ProfileComponent implements OnInit {
         this.saving = false;
       }
     });
-  }
-
- openCreateProfile(): void {
-    this.showCreateProfile = true;
-  }
-
-  closeCreateProfile(): void {
-    this.showCreateProfile = false;
   }
 }
 

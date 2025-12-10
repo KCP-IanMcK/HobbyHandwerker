@@ -3,14 +3,16 @@
 
     <div class="header-row">
       <h1 style="margin: 0; font-size: 2.2rem; border: none;">Startseite</h1>
-      <button (click)="openLogin()" class="login-header-btn">
+      <div style="width: 20%;"></div>
+      <button (click)="openLogin()" class="login-header-btn" *ngIf="!userId && !isLoggedIn">
         Zum Login
       </button>
+      <button id="createProfileButton" class="login-header-btn" (click)="openCreateProfile()" *ngIf="!userId && !isLoggedIn">Neues Profil erstellen</button>
     </div>
 
     <p class="intro-text">Hier findest du dein Benutzerprofil und wichtige Infos auf einen Blick.</p>
 
-    <div class="button-wrapper">
+    <div class="button-wrapper" *ngIf="userId && !isLoggedIn">
       <button id="showProfileButton" (click)="toggleProfile()" class="toggle-profile-btn">
         {{ showProfile ? 'Profil verbergen' : 'Profil anzeigen' }}
       </button>
@@ -31,4 +33,11 @@
     (loginSuccess)="handleLoginSuccess()"
     (cancel)="handleLoginCancel()">
   </app-login>
+</div>
+
+<!-- Modal Popup -->
+<div class="modal-overlay" *ngIf="showCreateProfile">
+  <div class="modal-content">
+    <app-create-profile (close)="closeCreateProfile()"></app-create-profile>
+  </div>
 </div>

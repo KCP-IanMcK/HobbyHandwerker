@@ -194,9 +194,12 @@ public class UserDao implements IUserDao {
     }
     List<User> user = new ArrayList<>();
     try (Connection con = dataSource.getConnection()) {
-      try (Statement stmt = con.createStatement()) {
-        String tableSql = "SELECT * FROM user where username = ? and password = ?;";
-        try (ResultSet resultSet = stmt.executeQuery(tableSql)) {
+        String sql = "SELECT * FROM user where username = ? and password = ?;";
+      try (PreparedStatement stmt = con.prepareStatement(sql)) {
+        stmt.setString(1, username);
+        stmt.setString(2, passwordSha);
+
+        try (ResultSet resultSet = stmt.executeQuery()) {
 
           resultSet.next();
 
