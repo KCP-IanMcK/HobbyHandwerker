@@ -64,8 +64,22 @@ jobs:
       - name: Wait for frontend to start
         run: sleep 15
 
+      - name: Start MariaDB with Docker Compose
+        run: docker-compose up -d mariadb
+
+      - name: Wait for MariaDB to be ready
+        run: |
+          echo "Waiting for MariaDB to become healthy..."
+          until docker inspect --format='{{.State.Health.Status}}' mariadb-hobbyhandwerker | grep healthy; do
+            sleep 2
+          done
+
       - name: Build with Maven
         run: mvn -B package --file backend/pom.xml
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/test_db
+          SPRING_DATASOURCE_USERNAME: test_user
+          SPRING_DATASOURCE_PASSWORD: test_password
 
       - name: Start backend in background with spring-boot:run
         run: nohup mvn --file backend/pom.xml spring-boot:run &
@@ -84,3 +98,6 @@ jobs:
         with:
           name: backend-test-reports
           path: backend/target/surefire-reports/
+
+      - name: Cleanup
+        run: docker-compose down -v
