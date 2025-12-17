@@ -5,36 +5,22 @@
     <img [src]="user.avatarUrl" alt="Profilbild" class="avatar" />
 
     <div *ngIf="!editing">
-      <p id="username"><strong>Name:</strong> {{ user.name }}</p>
+      <p id="username"><strong>Name:</strong> {{ user.username }}</p>
       <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Bio:</strong> {{ user.bio }}</p>
-      <button id="editProfileButton" (click)="toggleEdit()">Bearbeiten</button>
-      <button id="createProfileButton" class="create-btn" (click)="openCreateProfile()">Neues Profil erstellen</button>
+      <button id="editProfileButton" (click)="openEdit()">Bearbeiten</button>
     </div>
 
     <div id="editContainer" *ngIf="editing">
       <label>
         Name:
-        <input id="usernameInput" [(ngModel)]="user.name" />
+        <input id="usernameInput" [(ngModel)]="user.username" />
       </label>
       <label>
         Email:
         <input [(ngModel)]="user.email" />
       </label>
-      <label>
-        Bio:
-        <textarea [(ngModel)]="user.bio"></textarea>
-      </label>
       <button id="saveEditProfileButton" (click)="saveProfile()">Speichern</button>
-      <button id="closeEditProfileButton" (click)="toggleEdit()">Abbrechen</button>
+      <button id="closeEditProfileButton" (click)="closeEdit()">Abbrechen</button>
     </div>
-  </div>
-</div>
-
-<!-- Modal Popup -->
-<div class="modal-overlay" *ngIf="showCreateProfile">
-  <div class="modal-content">
-    <button class="close-btn" (click)="closeCreateProfile()">×</button>
-    <app-create-profile (close)="closeCreateProfile()"></app-create-profile>
   </div>
 </div>

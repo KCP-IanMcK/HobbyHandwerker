@@ -1,16 +1,43 @@
-<div class="home-container">
-  <h1>Willkommen zur Startseite</h1>
-  <p class="intro-text">Hier findest du dein Benutzerprofil und wichtige Infos auf einen Blick.</p>
+<div *ngIf="!isLoginView">
+  <div id="homeContainer" class="home-container">
 
-  <div class="button-wrapper">
-    <button id="showProfileButton" (click)="toggleProfile()" class="toggle-profile-btn">
-      {{ showProfile ? 'Profil verbergen' : 'Profil anzeigen' }}
-    </button>
+    <div class="header-row">
+      <h1 style="margin: 0; font-size: 2.2rem; border: none;">Startseite</h1>
+      <div style="width: 20%;"></div>
+      <button id="loginButton" (click)="openLogin()" class="login-header-btn" *ngIf="!userId && !isLoggedIn">
+        Zum Login
+      </button>
+      <button id="createProfileButton" class="login-header-btn" (click)="openCreateProfile()" *ngIf="!userId && !isLoggedIn">Neues Profil erstellen</button>
+    </div>
+
+    <p class="intro-text">Hier findest du dein Benutzerprofil und wichtige Infos auf einen Blick.</p>
+
+    <div class="button-wrapper" *ngIf="userId && !isLoggedIn">
+      <button id="showProfileButton" (click)="toggleProfile()" class="toggle-profile-btn">
+        {{ showProfile ? 'Profil verbergen' : 'Profil anzeigen' }}
+      </button>
+    </div>
+
+    <section class="profile-section" *ngIf="showProfile">
+      <h2>Dein Profil</h2>
+      <app-profile></app-profile>
+    </section>
   </div>
 
-  <section class="profile-section" *ngIf="showProfile">
-    <h2>Dein Profil</h2>
-    <app-profile></app-profile>
-  </section>
+  <app-explorer></app-explorer>
 </div>
-<app-explorer></app-explorer>
+
+<!-- Login View -->
+<div *ngIf="isLoginView">
+  <app-login
+    (loginSuccess)="handleLoginSuccess()"
+    (cancel)="handleLoginCancel()">
+  </app-login>
+</div>
+
+<!-- Modal Popup -->
+<div class="modal-overlay" *ngIf="showCreateProfile">
+  <div class="modal-content">
+    <app-create-profile (close)="closeCreateProfile()"></app-create-profile>
+  </div>
+</div>

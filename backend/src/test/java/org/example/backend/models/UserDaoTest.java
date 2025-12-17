@@ -83,4 +83,15 @@ class UserDaoTest {
     softly.assertThat(result.getUsername()).isEqualTo(user.getUsername());
     softly.assertThat(result.getEmail()).isEqualTo(user.getEmail());
   }
+
+  @Test
+  void login_success() {
+    String username = "testuser";
+    String password = "secret";
+
+    User result = dao.login(username, password);
+
+    assertNotNull(result);
+    assertEquals(username, result.getUsername());
+  }
 }

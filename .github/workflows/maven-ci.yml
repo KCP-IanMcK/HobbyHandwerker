@@ -11,6 +11,11 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+      MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
+      MARIADB_USER: ${{ secrets.MARIADB_USER }}
+      MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
     permissions:
       contents: read
       checks: write
@@ -64,11 +69,29 @@ jobs:
       - name: Wait for frontend to start
         run: sleep 15
 
+      - name: Start MariaDB with Docker Compose
+        run: docker compose -f DB/docker-compose.yml up -d mariadb
+
+      - name: Wait for MariaDB to be ready
+        run: |
+          echo "Waiting for MariaDB to become healthy..."
+          until docker inspect --format='{{.State.Health.Status}}' mariadb-hobbyhandwerker | grep healthy; do
+            sleep 2
+          done
+
       - name: Build with Maven
         run: mvn -B package --file backend/pom.xml
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/${MARIADB_DATABASE}
+          SPRING_DATASOURCE_USERNAME: ${MARIADB_USER}
+          SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD}
 
       - name: Start backend in background with spring-boot:run
         run: nohup mvn --file backend/pom.xml spring-boot:run &
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/${MARIADB_DATABASE}
+          SPRING_DATASOURCE_USERNAME: ${MARIADB_USER}
+          SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD}
 
       - name: Report test results
         if: always()
@@ -84,3 +107,7 @@ jobs:
         with:
           name: backend-test-reports
           path: backend/target/surefire-reports/
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f DB/docker-compose.yml down -v

@@ -68,12 +68,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- Insert dummy users
+-- PWs dummy2: pass2, dummy3: pass3 etc.
 INSERT INTO `user` (`ID_User`, `Email`, `Username`, `Password`, `FS_Role`) VALUES
-(1, 'visitor', 'visitor', 'visitor', 1),
-(2, 'dummy2@mail.de', 'dummy2', 'pass2', 2),
-(3, 'dummy3@mail.de', 'dummy3', 'pass3', 2),
-(4, 'dummy4@mail.de', 'dummy4', 'pass4', 2),
-(5, 'dummy5@mail.de', 'dummy5', 'pass5', 2);
+(1, 'visitor', 'visitor', '5f14f9e6d80f802a65269804f2552ef9889f2c7ccec5067214e58a1e48e0b3ff', 1),
+(2, 'dummy2@mail.de', 'dummy2', '1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9', 2),
+(3, 'dummy3@mail.de', 'dummy3', '3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167', 2),
+(4, 'dummy4@mail.de', 'dummy4', 'a417b5dc3d06d15d91c6687e27fc1705ebc56b3b2d813abe03066e5643fe4e74', 2),
+(5, 'dummy5@mail.de', 'dummy5', '0eeac8171768d0cdef3a20fee6db4362d019c91e10662a6b55186336e1a42778', 2);
 
 -- ----------------------------
 -- Table structure for `user_has_tool`

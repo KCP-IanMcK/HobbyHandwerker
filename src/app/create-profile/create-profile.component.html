@@ -1,6 +1,9 @@
 <div id="createProfileContainer" class="create-profile-container">
-  <button id="closeCreateProfileButton" (click)="closePopup()" style="padding-right: 1rem; padding-left: 1rem;">Schliessen</button>
-  <h2>Neues Profil erstellen</h2>
+  <div style="display: flex; justify-content: flex-end;">
+    <button id="closeCreateProfileButton" (click)="closePopup()" style="padding: 0.5rem 1rem;">
+      X
+    </button>
+  </div>  <h2>Neues Profil erstellen</h2>
 
   <form (ngSubmit)="submitForm()" novalidate>
     <label for="name">Name:</label>
@@ -33,15 +36,6 @@
     <div *ngIf="email.invalid && email.touched" class="error-msg">
       Bitte gültige Email eingeben.
     </div>
-
-    <label for="bio">Bio:</label>
-    <textarea
-      id="bio"
-      name="bio"
-      rows="4"
-      [(ngModel)]="profile.bio"
-      placeholder="Erzähl etwas über dich..."
-    ></textarea>
 
     <label for="avatarUrl">Profilbild URL:</label>
     <input
