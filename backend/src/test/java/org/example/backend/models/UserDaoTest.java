@@ -3,6 +3,7 @@ package org.example.backend.models;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -27,6 +28,8 @@ class UserDaoTest {
     ResultSet mockResultSet = mock(ResultSet.class);
     PreparedStatement mockPrepStatement = mock(PreparedStatement.class);
     ResultSet resultSet = mock(ResultSet.class);
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String hashedPassword = passwordEncoder.encode("secret");
 
 
     when(mockDataSource.getConnection()).thenReturn(mockConnection);
@@ -39,7 +42,7 @@ class UserDaoTest {
     when(mockResultSet.getInt("ID_user")).thenReturn(1);
     when(mockResultSet.getString("username")).thenReturn("testuser");
     when(mockResultSet.getString("email")).thenReturn("test@example.com");
-    when(mockResultSet.getString("password")).thenReturn("secret");
+    when(mockResultSet.getString("password")).thenReturn(hashedPassword);
     when(mockPrepStatement.executeQuery()).thenReturn(mockResultSet);
     when(mockPrepStatement.getUpdateCount()).thenReturn(1);
     when(mockPrepStatement.executeUpdate()).thenReturn(1);

@@ -1,5 +1,7 @@
 package org.example.backend.models;
 
+import org.example.backend.service.PasswordService;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,8 @@ import java.util.List;
 public class UserDao implements IUserDao {
 
   private final DataSource dataSource;
+
+  private PasswordService passwordService = new PasswordService();
 
   public UserDao(DataSource dataSource) {
     this.dataSource = dataSource;
@@ -101,6 +105,9 @@ public class UserDao implements IUserDao {
   @Override
   public User saveUser(User user) {
     int result;
+
+    user.setPassword(passwordService.hashPassword(user.getPassword()));
+
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
@@ -138,6 +145,8 @@ public class UserDao implements IUserDao {
   @Override
   public int update(int ID, User user) {
     int count = 0;
+    user.setPassword(passwordService.hashPassword(user.getPassword()));
+
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (Exception e) {
@@ -194,22 +203,25 @@ public class UserDao implements IUserDao {
     }
     List<User> user = new ArrayList<>();
     try (Connection con = dataSource.getConnection()) {
-        String sql = "SELECT * FROM user where username = ? and password = ?;";
+      String sql = "SELECT * FROM user where username = ?;";
       try (PreparedStatement stmt = con.prepareStatement(sql)) {
         stmt.setString(1, username);
-        stmt.setString(2, passwordSha);
 
         try (ResultSet resultSet = stmt.executeQuery()) {
 
           resultSet.next();
 
-          User u = new User();
-          u.setId_user(resultSet.getInt("ID_user"));
-          u.setUsername(resultSet.getString("username"));
-          u.setEmail(resultSet.getString("email"));
-          u.setRole(resultSet.getInt("FS_Role"));
+          boolean rightPassword = passwordService.verifyPassword(passwordSha, resultSet.getString("password"));
 
-          user.add(u);
+          if (rightPassword) {
+            User u = new User();
+            u.setId_user(resultSet.getInt("ID_user"));
+            u.setUsername(resultSet.getString("username"));
+            u.setEmail(resultSet.getString("email"));
+            u.setRole(resultSet.getInt("FS_Role"));
+
+            user.add(u);
+          }
         }
         stmt.close();
         con.close();

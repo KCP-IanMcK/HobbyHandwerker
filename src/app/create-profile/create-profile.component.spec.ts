@@ -24,26 +24,27 @@ describe('CreateProfileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('sollte Formular zurücksetzen und Erfolgsmeldung anzeigen bei erfolgreichem Submit', () => {
+  it('sollte Formular zurücksetzen und Erfolgsmeldung anzeigen bei erfolgreichem Submit', async () => {
     spyOn(http, 'post').and.returnValue(of({}));
 
-    component.profile = { name: 'Test', email: 'test@test.com', bio: 'bio', avatarUrl: 'url' };
-    component.submitForm();
+    component.profile = { username: 'Test', email: 'test@test.com', password: '123', bio: 'bio', avatarUrl: 'url' };
+    await component.submitForm();
 
-    expect(component.profile!.name).toBe('');
+    expect(component.profile!.username).toBe('');
     expect(component.profile!.email).toBe('');
+    expect(component.profile!.password).toBe('');
     expect(component.profile!.bio).toBe('');
     expect(component.profile!.avatarUrl).toBe('');
     expect(component.message).toBe('Profil erfolgreich erstellt!');
   });
 
-  it('sollte Fehlermeldung anzeigen bei fehlgeschlagenem Submit', () => {
+  it('sollte Fehlermeldung anzeigen bei fehlgeschlagenem Submit', async () => {
     spyOn(http, 'post').and.returnValue(
       throwError(() => new Error('Fehler'))
     );
 
-    component.profile = { name: 'Test', email: 'test@test.com', bio: 'bio', avatarUrl: 'url' };
-    component.submitForm();
+    component.profile = { username: 'Test', email: 'test@test.com', password: '123', bio: 'bio', avatarUrl: 'url' };
+    await component.submitForm();
 
     expect(component.message).toBe(
       'Fehler beim Erstellen des Profils. Bitte versuche es später erneut.'
