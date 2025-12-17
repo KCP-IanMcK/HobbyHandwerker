@@ -60,6 +60,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`ID_User`),
   UNIQUE KEY `ID_User_UNIQUE` (`ID_User`),
   UNIQUE KEY `Email_UNIQUE` (`Email`),
+  UNIQUE KEY `Password_UNIQUE` (`Password`),
   KEY `REL_Role_User_idx` (`FS_Role`),
   CONSTRAINT `REL_Role_User`
       FOREIGN KEY (`FS_Role`)
@@ -70,11 +71,11 @@ CREATE TABLE `user` (
 -- Insert dummy users
 -- PWs dummy2: pass2, dummy3: pass3 etc.
 INSERT INTO `user` (`ID_User`, `Email`, `Username`, `Password`, `FS_Role`) VALUES
-(1, 'visitor', 'visitor', '5f14f9e6d80f802a65269804f2552ef9889f2c7ccec5067214e58a1e48e0b3ff', 1),
-(2, 'dummy2@mail.de', 'dummy2', '1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9', 2),
-(3, 'dummy3@mail.de', 'dummy3', '3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167', 2),
-(4, 'dummy4@mail.de', 'dummy4', 'a417b5dc3d06d15d91c6687e27fc1705ebc56b3b2d813abe03066e5643fe4e74', 2),
-(5, 'dummy5@mail.de', 'dummy5', '0eeac8171768d0cdef3a20fee6db4362d019c91e10662a6b55186336e1a42778', 2);
+(1, 'visitor', 'visitor', '$2a$10$O.U1IL1sMlySGk.LGzseu.R.99KCgb3m7O3y5gCKtTds8kzz.hL4q', 1),
+(2, 'dummy2@mail.de', 'dummy2', '$2a$10$EL0niT/fWpcKBLaSUvh0bOUB6bBAwZW2WbJNbRZSCqCf7pstjk.zW', 2),
+(3, 'dummy3@mail.de', 'dummy3', '$2a$10$gVn8P.GGAmulz3VsCQXISe1AeakyVvaEKbK4tp3v1uGMfdaE8qlzu', 2),
+(4, 'dummy4@mail.de', 'dummy4', '$2a$10$W4ujTPIJ/3aTUBc/9VVmcu9bZhnFNOUAmgz7JFxa47/aChA35ptt.', 2),
+(5, 'dummy5@mail.de', 'dummy5', '$2a$10$Fm36z5wafdhYjUbah6ZrdOBJ4K10bdeApfkjYGbou.dyBYuEqb2Am', 2);
 
 -- ----------------------------
 -- Table structure for `user_has_tool`

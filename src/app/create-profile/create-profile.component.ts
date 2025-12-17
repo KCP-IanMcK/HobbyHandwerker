@@ -13,8 +13,9 @@ export class CreateProfileComponent {
   @Output() close = new EventEmitter<boolean>();  // <-- EventEmitter definieren
 
   profile = {
-    name: '',
+    username: '',
     email: '',
+    password: '',
     bio: '',
     avatarUrl: ''
   };
@@ -25,10 +26,12 @@ export class CreateProfileComponent {
 
   constructor(private http: HttpClient) {}
 
-  submitForm(): void {
-    if (!this.profile.name || !this.profile.email) {
+  async submitForm(): Promise<void> {
+    if (!this.profile.username || !this.profile.email || !this.profile.password) {
       return;
     }
+
+    this.profile.password = await this.hashPassword(this.profile.password);
 
     this.http.post(this.apiUrl, this.profile).subscribe({
       next: (res) => {
@@ -45,8 +48,9 @@ export class CreateProfileComponent {
 
   resetForm(): void {
     this.profile = {
-      name: '',
+      username: '',
       email: '',
+      password: '',
       bio: '',
       avatarUrl: ''
     };
@@ -55,4 +59,13 @@ export class CreateProfileComponent {
   closePopup(): void {
     this.close.emit(false);
   }
+
+async hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
 }
