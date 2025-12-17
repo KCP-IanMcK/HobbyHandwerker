@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
   userBeforeEdit: any = null;
 
   editing: boolean = false;
-  apiUrl = environment.apiUrl;
+  apiUrl = environment.apiUrl + 'user';
 
   // Für Fehlermeldungen
   errorMessage: string | null = null;

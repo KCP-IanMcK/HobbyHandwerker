@@ -36,7 +36,7 @@ export class CreateProfileComponent {
   hasNumber: boolean = false;
   hasSpecialChar: boolean = false;
 
-  apiUrl = environment.apiUrl;
+  apiUrl = environment.apiUrl + 'user';
 
   constructor(private http: HttpClient) {}
 
@@ -76,7 +76,7 @@ export class CreateProfileComponent {
 
     const createdName = this.profile.username;
 
-    this.http.post(this.apiUrl, this.profile).subscribe({
+    this.http.post(this.apiUrl + 'user', this.profile).subscribe({
       next: (res) => {
         this.resetForm();
         this.message = `User "${createdName}" wurde erfolgreich erstellt!`;
