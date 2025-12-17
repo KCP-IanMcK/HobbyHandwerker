@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-create-profile',
@@ -35,8 +36,7 @@ export class CreateProfileComponent {
   hasNumber: boolean = false;
   hasSpecialChar: boolean = false;
 
-  message: string | null = null;
-  apiUrl = 'http://localhost:8080/user';
+  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   userBeforeEdit: any = null;
 
   editing: boolean = false;
-  apiUrl = 'http://localhost:8080/user';
+  apiUrl = environment.apiUrl;
 
   // Für Fehlermeldungen
   errorMessage: string | null = null;
