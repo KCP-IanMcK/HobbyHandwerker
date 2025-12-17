@@ -71,7 +71,6 @@ export class ProfileComponent implements OnInit {
    }
 
   saveProfile(): void {
-    console.log(this.user);
     const userId = localStorage.getItem("loggedInUserId") ?? "1";
         const token = localStorage.getItem("jwtToken");
         const options = { headers: { Authorization: "Bearer " + token } }
@@ -86,7 +85,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Fehler beim Speichern:', err);
-        this.errorMessage = 'Fehler beim Speichern des Profils. Bitte versuche es später erneut.';
+        this.errorMessage = 'Username schon vergeben oder Fehler beim Speichern des Profils. Bitte versuche es später erneut.';
         this.saving = false;
       }
     });

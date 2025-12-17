@@ -1,8 +1,6 @@
 package org.example.backend.controller;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.example.backend.factory.DataSourceFactory;
 import org.example.backend.models.AuthResponse;
@@ -32,6 +30,28 @@ public class UserController {
 
   public void setDao(IUserDao dao) {
     this.dao = dao;
+  }
+
+  @GetMapping("/checkJWT")
+  public ResponseEntity<Boolean> checkJWT(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+    }
+
+    String token = authHeader.replace("Bearer ", "");
+    Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+
+    try {
+      Jwts.parserBuilder()
+        .setSigningKey(secretKey)
+        .build()
+        .parseClaimsJws(token);
+      return ResponseEntity.ok(true);
+    } catch (ExpiredJwtException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    } catch (JwtException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
   }
 
   @GetMapping("/all")

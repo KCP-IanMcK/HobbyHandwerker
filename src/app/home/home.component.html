@@ -8,6 +8,7 @@
         Zum Login
       </button>
       <button id="createProfileButton" class="login-header-btn" (click)="openCreateProfile()" *ngIf="!userId && !isLoggedIn">Neues Profil erstellen</button>
+      <button id="logoutButton" class="login-header-btn" (click)="logOut()" *ngIf="userId || isLoggedIn">Log Out</button>
     </div>
 
     <p class="intro-text">Hier findest du dein Benutzerprofil und wichtige Infos auf einen Blick.</p>
