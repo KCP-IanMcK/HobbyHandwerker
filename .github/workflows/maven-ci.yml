@@ -65,7 +65,7 @@ jobs:
         run: sleep 15
 
       - name: Start MariaDB with Docker Compose
-        run: docker-compose up -d mariadb
+        run: docker compose up -d mariadb
 
       - name: Wait for MariaDB to be ready
         run: |
@@ -100,4 +100,4 @@ jobs:
           path: backend/target/surefire-reports/
 
       - name: Cleanup
-        run: docker-compose down -v
+        run: docker compose down -v
