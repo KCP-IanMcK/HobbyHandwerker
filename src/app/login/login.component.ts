@@ -24,7 +24,7 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  apiUrl = environment.apiUrl + 'login';
+  apiUrl = environment.apiUrl + 'user/login';
 
   constructor(private http: HttpClient) {}
 
