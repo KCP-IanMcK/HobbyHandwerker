@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 export class CreateProfileComponent {
   @Output() close = new EventEmitter<boolean>();
 
+  @ViewChild('profileForm') profileForm!: NgForm;
+
   profile = {
     username: '',
     email: '',
@@ -21,12 +23,12 @@ export class CreateProfileComponent {
     avatarUrl: ''
   };
 
-  // Variables for Password Strength
+  // Visibility flag for strength meter
+  showPasswordMeter: boolean = false;
+
   strengthScore: number = 0;
   strengthText: string = '';
-  strengthColor: string = '#e74c3c'; // Default Red
-
-  // Flags for specific requirements
+  strengthColor: string = '#e74c3c';
   hasMinLength: boolean = false;
   hasUpperCase: boolean = false;
   hasLowerCase: boolean = false;
@@ -40,15 +42,12 @@ export class CreateProfileComponent {
 
   checkPasswordStrength(): void {
     const pw = this.profile.password || '';
-
-    // Check individual requirements
     this.hasMinLength = pw.length >= 12;
     this.hasUpperCase = /[A-Z]/.test(pw);
     this.hasLowerCase = /[a-z]/.test(pw);
     this.hasNumber = /\d/.test(pw);
     this.hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw);
 
-    // Calculate Score (0 to 4)
     let score = 0;
     if (this.hasMinLength) score++;
     if (this.hasUpperCase && this.hasLowerCase) score++;
@@ -56,43 +55,35 @@ export class CreateProfileComponent {
     if (this.hasSpecialChar) score++;
 
     this.strengthScore = score;
-
-    // Update UI Text and Color
     switch (score) {
-      case 0:
-      case 1:
-        this.strengthText = 'Schwach';
-        this.strengthColor = '#e74c3c'; // Red
-        break;
-      case 2:
-        this.strengthText = 'Mittel';
-        this.strengthColor = '#f39c12'; // Orange
-        break;
-      case 3:
-        this.strengthText = 'Gut';
-        this.strengthColor = '#3498db'; // Blue
-        break;
-      case 4:
-        this.strengthText = 'Sehr stark';
-        this.strengthColor = '#27ae60'; // Green
-        break;
+      case 0: case 1: this.strengthText = 'Schwach'; this.strengthColor = '#e74c3c'; break;
+      case 2: this.strengthText = 'Mittel'; this.strengthColor = '#f39c12'; break;
+      case 3: this.strengthText = 'Gut'; this.strengthColor = '#3498db'; break;
+      case 4: this.strengthText = 'Sehr stark'; this.strengthColor = '#27ae60'; break;
     }
   }
 
   submitForm(): void {
     if (!this.profile.username || !this.profile.email || !this.profile.password) {
+      this.message = "Bitte alle Pflichtfelder ausfüllen.";
       return;
     }
 
+    if (this.strengthScore < 4) {
+      this.message = "Passwort ist nicht stark genug.";
+      return;
+    }
+
+    const createdName = this.profile.username;
+
     this.http.post(this.apiUrl, this.profile).subscribe({
       next: (res) => {
-        this.message = 'Profil erfolgreich erstellt!';
         this.resetForm();
-        this.closePopup();
+        this.message = `User "${createdName}" wurde erfolgreich erstellt!`;
       },
       error: (err) => {
-        console.error('Fehler beim Erstellen des Profils:', err);
-        this.message = 'Fehler beim Erstellen des Profils. Bitte versuche es später erneut.';
+        console.error('Fehler:', err);
+        this.message = 'Fehler beim Erstellen des Profils.';
       }
     });
   }
@@ -105,10 +96,24 @@ export class CreateProfileComponent {
       bio: '',
       avatarUrl: ''
     };
+
     // Reset Strength UI
     this.strengthScore = 0;
     this.strengthText = '';
     this.strengthColor = '#e74c3c';
+    this.hasMinLength = false;
+    this.hasUpperCase = false;
+    this.hasLowerCase = false;
+    this.hasNumber = false;
+    this.hasSpecialChar = false;
+
+    // Hide meter
+    this.showPasswordMeter = false;
+
+    // Reset Form Validation State
+    if (this.profileForm) {
+      this.profileForm.resetForm();
+    }
   }
 
   closePopup(): void {

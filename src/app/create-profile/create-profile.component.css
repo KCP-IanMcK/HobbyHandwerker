@@ -1,5 +1,9 @@
 .create-profile-container {
   max-width: 450px;
+  /* Make scrollable */
+  max-height: 85vh;
+  overflow-y: auto;
+
   margin: 2rem auto;
   padding: 2rem 2.5rem;
   background-color: #fff;
@@ -7,7 +11,27 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
-  max-height: 500px;
+
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar Styling */
+.create-profile-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.create-profile-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.create-profile-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.create-profile-container::-webkit-scrollbar-thumb:hover {
+  background: #4a90e2;
 }
 
 .create-profile-container h2 {
@@ -58,7 +82,7 @@ textarea:focus {
   margin-bottom: 0.5rem;
 }
 
-button {
+button[type="submit"] {
   background-color: #4a90e2;
   color: white;
   font-weight: 700;
@@ -71,22 +95,33 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:disabled {
+button[type="submit"]:disabled {
   background-color: #a0c4f7;
   cursor: not-allowed;
 }
 
-button:hover:not(:disabled) {
+button[type="submit"]:hover:not(:disabled) {
   background-color: #357abd;
 }
 
 .message {
   margin-top: 1.5rem;
-  font-weight: 600;
-  color: #27ae60;
+  padding: 1rem;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
   text-align: center;
+  font-weight: 600;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Strength Meter */
 .strength-meter {
   height: 6px;
   background-color: #eee;
@@ -111,6 +146,7 @@ button:hover:not(:disabled) {
   text-align: right;
 }
 
+/* Requirements List */
 .password-requirements {
   list-style: none;
   padding: 0;
