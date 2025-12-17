@@ -70,7 +70,7 @@ export class CreateProfileComponent {
       return;
     }
 
-    if (this.strengthScore < 3) {
+    if (this.strengthScore < 4) {
       this.message = "Passwort ist nicht stark genug.";
       return;
     }
@@ -90,7 +90,7 @@ export class CreateProfileComponent {
     this.http.post(this.apiUrl, this.profile).subscribe({
       next: (res) => {
         this.resetForm();
-        this.message = `User "${createdName}" was successfully created!`;
+        this.message = `User "${createdName}" wurde erfolgreich erstellt!`;
       },
       error: (err) => {
         console.error('Fehler:', err);
