@@ -25,11 +25,14 @@ export class LoginComponent {
 
   constructor(private http: HttpClient) {}
 
-  onSubmit() {
-    const loginData = {
-      username: this.username,
-      password: this.password
-    };
+ async onSubmit() {
+    try {
+        const hashedPassword = await this.hashPassword(this.password);
+
+        const loginData = {
+          username: this.username,
+          password: hashedPassword
+        };
 
     this.http.put<any>('http://localhost:8080/user/login', loginData).subscribe({
       next: (response) => {
@@ -53,8 +56,19 @@ export class LoginComponent {
         this.errorMessage = 'Benutzername oder Passwort falsch.';
       }
     });
+  } catch (err) {
+      console.error('Fehler beim Hashen des Passworts', err);
+    }
   }
 
+async hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
 
   onCancel() {
     this.cancel.emit();
