@@ -44,14 +44,36 @@
       id="password"
       name="password"
       required
-      minlength="12"
+      minlength="8"
       [(ngModel)]="profile.password"
       #password="ngModel"
+      (input)="checkPasswordStrength()"
       [class.invalid]="password.invalid && password.touched"
       placeholder="Dein Passwort"
     />
+
+    <!-- Visual Strength Meter -->
+    <div class="strength-meter">
+      <div
+        class="strength-bar"
+        [style.width.%]="strengthScore * 25"
+        [style.background-color]="strengthColor">
+      </div>
+    </div>
+
+    <p class="strength-text" [style.color]="strengthColor">{{ strengthText }}</p>
+
+    <!-- Detailed Requirements -->
+    <ul class="password-requirements">
+      <li [class.valid]="hasMinLength">Mindestens 12 Zeichen</li>
+      <li [class.valid]="hasUpperCase">Großbuchstabe</li>
+      <li [class.valid]="hasLowerCase">Kleinbuchstabe</li>
+      <li [class.valid]="hasNumber">Zahl</li>
+      <li [class.valid]="hasSpecialChar">Sonderzeichen (!#$...)</li>
+    </ul>
+
     <div *ngIf="password.invalid && password.touched" class="error-msg">
-      Passwort ist Pflicht (mindestens 12 Zeichen).
+      Passwort ist Pflicht.
     </div>
 
     <label for="avatarUrl">Profilbild URL:</label>

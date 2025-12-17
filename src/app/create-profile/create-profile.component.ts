@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-profile',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './create-profile.component.html',
   styleUrls: ['./create-profile.component.css']
@@ -20,18 +21,68 @@ export class CreateProfileComponent {
     avatarUrl: ''
   };
 
-  message: string | null = null;
+  // Variables for Password Strength
+  strengthScore: number = 0;
+  strengthText: string = '';
+  strengthColor: string = '#e74c3c'; // Default Red
 
+  // Flags for specific requirements
+  hasMinLength: boolean = false;
+  hasUpperCase: boolean = false;
+  hasLowerCase: boolean = false;
+  hasNumber: boolean = false;
+  hasSpecialChar: boolean = false;
+
+  message: string | null = null;
   apiUrl = 'http://localhost:8080/user';
 
   constructor(private http: HttpClient) {}
 
-  async submitForm(): Promise<void> {
+  checkPasswordStrength(): void {
+    const pw = this.profile.password || '';
+
+    // Check individual requirements
+    this.hasMinLength = pw.length >= 12;
+    this.hasUpperCase = /[A-Z]/.test(pw);
+    this.hasLowerCase = /[a-z]/.test(pw);
+    this.hasNumber = /\d/.test(pw);
+    this.hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw);
+
+    // Calculate Score (0 to 4)
+    let score = 0;
+    if (this.hasMinLength) score++;
+    if (this.hasUpperCase && this.hasLowerCase) score++;
+    if (this.hasNumber) score++;
+    if (this.hasSpecialChar) score++;
+
+    this.strengthScore = score;
+
+    // Update UI Text and Color
+    switch (score) {
+      case 0:
+      case 1:
+        this.strengthText = 'Schwach';
+        this.strengthColor = '#e74c3c'; // Red
+        break;
+      case 2:
+        this.strengthText = 'Mittel';
+        this.strengthColor = '#f39c12'; // Orange
+        break;
+      case 3:
+        this.strengthText = 'Gut';
+        this.strengthColor = '#3498db'; // Blue
+        break;
+      case 4:
+        this.strengthText = 'Sehr stark';
+        this.strengthColor = '#27ae60'; // Green
+        break;
+    }
+  }
+
+  submitForm(): void {
     if (!this.profile.username || !this.profile.email || !this.profile.password) {
       return;
     }
-
-    this.profile.password = await this.hashPassword(this.profile.password);
 
     this.http.post(this.apiUrl, this.profile).subscribe({
       next: (res) => {
@@ -54,18 +105,13 @@ export class CreateProfileComponent {
       bio: '',
       avatarUrl: ''
     };
+    // Reset Strength UI
+    this.strengthScore = 0;
+    this.strengthText = '';
+    this.strengthColor = '#e74c3c';
   }
 
   closePopup(): void {
     this.close.emit(false);
   }
-
-async hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  return hashHex;
-}
 }

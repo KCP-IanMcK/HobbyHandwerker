@@ -86,3 +86,58 @@ button:hover:not(:disabled) {
   color: #27ae60;
   text-align: center;
 }
+
+.strength-meter {
+  height: 6px;
+  background-color: #eee;
+  border-radius: 3px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+  text-align: right;
+}
+
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.password-requirements li {
+  font-size: 0.8rem;
+  color: #999;
+  display: flex;
+  align-items: center;
+}
+
+.password-requirements li.valid {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.password-requirements li::before {
+  content: '○';
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.password-requirements li.valid::before {
+  content: '✓';
+}
