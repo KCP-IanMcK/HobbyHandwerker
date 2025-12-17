@@ -145,7 +145,9 @@ public class UserDao implements IUserDao {
   @Override
   public int update(int ID, User user) {
     int count = 0;
-    user.setPassword(passwordService.hashPassword(user.getPassword()));
+    if (user.getPassword() != null) {
+      user.setPassword(passwordService.hashPassword(user.getPassword()));
+    }
 
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");

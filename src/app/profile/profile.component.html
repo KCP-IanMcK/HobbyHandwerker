@@ -19,6 +19,7 @@
         Email:
         <input [(ngModel)]="user.email" />
       </label>
+      <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
       <button id="saveEditProfileButton" (click)="saveProfile()">Speichern</button>
       <button id="closeEditProfileButton" (click)="closeEdit()">Abbrechen</button>
     </div>

@@ -60,7 +60,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`ID_User`),
   UNIQUE KEY `ID_User_UNIQUE` (`ID_User`),
   UNIQUE KEY `Email_UNIQUE` (`Email`),
-  UNIQUE KEY `Password_UNIQUE` (`Password`),
+  UNIQUE KEY `Username_UNIQUE` (`Username`),
   KEY `REL_Role_User_idx` (`FS_Role`),
   CONSTRAINT `REL_Role_User`
       FOREIGN KEY (`FS_Role`)

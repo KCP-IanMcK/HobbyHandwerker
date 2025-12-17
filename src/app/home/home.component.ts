@@ -54,4 +54,9 @@ export class HomeComponent implements OnInit {
   closeCreateProfile(): void {
     this.showCreateProfile = false;
   }
+
+logOut(): void {
+  localStorage.clear();
+  window.location.reload();
+  }
 }
