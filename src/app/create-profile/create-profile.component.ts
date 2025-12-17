@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./create-profile.component.css']
 })
 export class CreateProfileComponent {
-  @Output() close = new EventEmitter<boolean>();  // <-- EventEmitter definieren
+  @Output() close = new EventEmitter<boolean>();
 
   profile = {
     username: '',
