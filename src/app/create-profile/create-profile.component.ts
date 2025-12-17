@@ -42,7 +42,7 @@ export class CreateProfileComponent {
 
   checkPasswordStrength(): void {
     const pw = this.profile.password || '';
-    this.hasMinLength = pw.length >= 8;
+    this.hasMinLength = pw.length >= 12;
     this.hasUpperCase = /[A-Z]/.test(pw);
     this.hasLowerCase = /[a-z]/.test(pw);
     this.hasNumber = /\d/.test(pw);
@@ -77,7 +77,6 @@ export class CreateProfileComponent {
 
     const createdName = this.profile.username;
 
-    // RESTORED: Client-side hashing
     // We hash the password before sending it to the backend
     try {
       this.profile.password = await this.hashPassword(this.profile.password);
