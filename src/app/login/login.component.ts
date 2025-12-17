@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,8 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
+  apiUrl = environment.apiUrl + 'login';
+
   constructor(private http: HttpClient) {}
 
  async onSubmit() {
@@ -34,7 +37,7 @@ export class LoginComponent {
           password: hashedPassword
         };
 
-    this.http.put<any>('http://localhost:8080/user/login', loginData).subscribe({
+    this.http.put<any>(this.apiUrl, loginData).subscribe({
       next: (response) => {
         const token = response.token;
         const user = response.user;

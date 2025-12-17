@@ -23,7 +23,7 @@ export class CreateProfileComponent {
 
   message: string | null = null;
 
-  apiUrl = environment.apiUrl;
+  apiUrl = environment.apiUrl + 'user';
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +34,7 @@ export class CreateProfileComponent {
 
     this.profile.password = await this.hashPassword(this.profile.password);
 
-    this.http.post(this.apiUrl, this.profile).subscribe({
+    this.http.post(this.apiUrl + 'user', this.profile).subscribe({
       next: (res) => {
         this.message = 'Profil erfolgreich erstellt!';
         this.resetForm();
