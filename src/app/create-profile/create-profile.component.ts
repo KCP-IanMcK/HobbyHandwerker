@@ -2,7 +2,6 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-create-profile',
@@ -36,13 +35,14 @@ export class CreateProfileComponent {
   hasNumber: boolean = false;
   hasSpecialChar: boolean = false;
 
-  apiUrl = environment.apiUrl;
+  message: string | null = null;
+  apiUrl = 'http://localhost:8080/user';
 
   constructor(private http: HttpClient) {}
 
   checkPasswordStrength(): void {
     const pw = this.profile.password || '';
-    this.hasMinLength = pw.length >= 12;
+    this.hasMinLength = pw.length >= 8;
     this.hasUpperCase = /[A-Z]/.test(pw);
     this.hasLowerCase = /[a-z]/.test(pw);
     this.hasNumber = /\d/.test(pw);
@@ -63,23 +63,34 @@ export class CreateProfileComponent {
     }
   }
 
-  submitForm(): void {
+  // Changed to async to handle hashing
+  async submitForm(): Promise<void> {
     if (!this.profile.username || !this.profile.email || !this.profile.password) {
       this.message = "Bitte alle Pflichtfelder ausfüllen.";
       return;
     }
 
-    if (this.strengthScore < 4) {
+    if (this.strengthScore < 3) {
       this.message = "Passwort ist nicht stark genug.";
       return;
     }
 
     const createdName = this.profile.username;
 
+    // RESTORED: Client-side hashing
+    // We hash the password before sending it to the backend
+    try {
+      this.profile.password = await this.hashPassword(this.profile.password);
+    } catch (e) {
+      console.error("Hashing failed", e);
+      this.message = "Interner Fehler bei der Passwortverarbeitung.";
+      return;
+    }
+
     this.http.post(this.apiUrl, this.profile).subscribe({
       next: (res) => {
         this.resetForm();
-        this.message = `User "${createdName}" wurde erfolgreich erstellt!`;
+        this.message = `User "${createdName}" was successfully created!`;
       },
       error: (err) => {
         console.error('Fehler:', err);
@@ -118,5 +129,15 @@ export class CreateProfileComponent {
 
   closePopup(): void {
     this.close.emit(false);
+  }
+
+  // RESTORED: Helper function to hash password with SHA-256
+  async hashPassword(password: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
   }
 }
