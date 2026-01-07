@@ -64,7 +64,9 @@ class UserDaoTest {
   @Test
   void selectUserByID() {
     int id = 1;
-    assertEquals(id, dao.select(id).getId_user());
+    User user = dao.select(id)
+      .orElseThrow(() -> new AssertionError("User mit ID " + id + " nicht gefunden"));
+    assertEquals(id, user.getId_user());
   }
 
   @Test
@@ -78,7 +80,8 @@ class UserDaoTest {
   void insert() {
     User user = new User(2, 2, "1234", "anna@email.com", "Anna");
 
-    User result = dao.saveUser(user);
+    User result = dao.saveUser(user)
+      .orElseThrow(() -> new AssertionError("User not saved"));
 
     SoftAssertions softly = new SoftAssertions();
     softly.assertThat(result.getId_user()).isEqualTo(user.getId_user());
@@ -92,7 +95,8 @@ class UserDaoTest {
     String username = "testuser";
     String password = "secret";
 
-    User result = dao.login(username, password);
+    User result = dao.login(username, password)
+      .orElseThrow(() -> new AssertionError("Login failed"));
 
     assertNotNull(result);
     assertEquals(username, result.getUsername());

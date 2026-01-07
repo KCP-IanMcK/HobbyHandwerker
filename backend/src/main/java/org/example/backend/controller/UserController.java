@@ -47,8 +47,6 @@ public class UserController {
         .build()
         .parseClaimsJws(token);
       return ResponseEntity.ok(true);
-    } catch (ExpiredJwtException e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     } catch (JwtException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
@@ -78,12 +76,9 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<User> createUser(@RequestBody User user) {
-    User returnedUser = dao.saveUser(user);
-    if (returnedUser != null) {
-      return ResponseEntity.status(HttpStatus.CREATED).body(returnedUser);
-    } else {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+    return dao.saveUser(user)
+      .map(u -> ResponseEntity.status(HttpStatus.CREATED).body(u))
+      .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
   }
 
   @GetMapping("/{user_id}")
@@ -100,20 +95,14 @@ public class UserController {
     int userId = claims.get("userId", Integer.class);
 
     if (!(role == 2 && userId == user_id) && role != 3) { // user or admin
-      User user = dao.select(1); //visitor
-      if (user != null) {
-        return ResponseEntity.ok(user);
-      } else {
-        return ResponseEntity.notFound().build();
-      }
+      return dao.select(1) //visitor
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     }
 
-    User user = dao.select(user_id);
-    if (user != null) {
-      return ResponseEntity.ok(user);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+    return dao.select(user_id)
+      .map(ResponseEntity::ok)
+      .orElse(ResponseEntity.notFound().build());
   }
 
   @PutMapping("/{user_id}")
@@ -145,25 +134,24 @@ public class UserController {
 
   @PutMapping("/login")
   public ResponseEntity<AuthResponse> loginByUsernameAndPassword(@RequestBody User user) {
-    User loggedInUser = dao.login(user.getUsername(), user.getPassword());
+    return dao.login(user.getUsername(), user.getPassword())
+      .map(loggedInUser -> {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", loggedInUser.getId_user());
+        claims.put("username", loggedInUser.getUsername());
+        claims.put("role", loggedInUser.getRole());
 
-    if (loggedInUser != null) {
-      Map<String, Object> claims = new HashMap<>();
-      claims.put("userId", loggedInUser.getId_user());
-      claims.put("username", loggedInUser.getUsername());
-      claims.put("role", loggedInUser.getRole());
+        Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
-      Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        String token = Jwts.builder()
+          .setClaims(claims)
+          .setIssuedAt(new Date())
+          .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
+          .signWith(secretKey, SignatureAlgorithm.HS256)
+          .compact();
 
-      String token = Jwts.builder()
-        .setClaims(claims)
-        .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
-        .signWith(secretKey, SignatureAlgorithm.HS256)
-        .compact();
-      return ResponseEntity.ok(new AuthResponse(token, loggedInUser));
-    } else {
-      return ResponseEntity.badRequest().build();
-    }
+        return ResponseEntity.ok(new AuthResponse(token, loggedInUser));
+      })
+      .orElse(ResponseEntity.badRequest().build());
   }
 }
