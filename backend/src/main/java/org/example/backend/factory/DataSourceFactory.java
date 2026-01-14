@@ -9,8 +9,8 @@ public class DataSourceFactory {
     MysqlDataSource ds = new MysqlDataSource();
 
     String url = "jdbc:mysql://localhost:3306/hobbyhandwerker";
-    String user = System.getenv("DB_USER");
-    String password = System.getenv("DB_PASSWORD");
+    String user = System.getenv("MARIADB_USER");
+    String password = System.getenv("MARIADB_PASSWORD");
 
     if (user == null || password == null) {
       throw new IllegalStateException("Database-Env-Variables not set!");
