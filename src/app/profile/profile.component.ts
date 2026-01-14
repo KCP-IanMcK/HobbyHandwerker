@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit {
   editing: boolean = false;
   apiUrl = environment.apiUrl + 'user';
 
-  // Für Fehlermeldungen
   errorMessage: string | null = null;
   saving: boolean = false;
 
@@ -60,7 +59,7 @@ export class ProfileComponent implements OnInit {
   }
 
   openEdit(): void {
-    this.errorMessage = null; // Fehler beim Starten der Bearbeitung löschen
+    this.errorMessage = null;
     this.userBeforeEdit = { ...this.user };
     this.editing = true;
   }

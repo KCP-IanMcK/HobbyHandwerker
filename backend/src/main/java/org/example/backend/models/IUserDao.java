@@ -1,11 +1,12 @@
 package org.example.backend.models;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserDao {
-  public List<User> select();
-  public User select(int ID);
-  public User saveUser(User user);
-  public int update(int ID, User user);
-  public User login(String username, String passwordSha);
+  List<User> select();
+  Optional<User> select(int ID);
+  Optional<User> saveUser(User user);
+  int update(int ID, User user);
+  Optional<User> login(String username, String passwordSha);
 }

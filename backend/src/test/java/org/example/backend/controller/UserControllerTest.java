@@ -81,7 +81,7 @@ class UserControllerTest {
 
   @Test
   void createUser() {
-    when(userDao.saveUser(user1)).thenReturn(user1);
+    when(userDao.saveUser(user1)).thenReturn(Optional.of(user1));
     ResponseEntity<User> expectedResult = ResponseEntity.status(201).body(user1);
 
     var result = userController.createUser(user1);
@@ -91,7 +91,7 @@ class UserControllerTest {
 
   @Test
   void getUserByID() {
-    when(userDao.select(1)).thenReturn(user1);
+    when(userDao.select(1)).thenReturn(Optional.of(user1));
     ResponseEntity<User> expectedResult = ResponseEntity.ok().body(user1);
 
     var result = userController.getUserByID(adminToken, 1);
@@ -112,7 +112,7 @@ class UserControllerTest {
   @Test
   void loginUser_success() {
     User user = new User();
-    when(userDao.login("user1", "password")).thenReturn(user);
+    when(userDao.login("user1", "password")).thenReturn(Optional.of(user));
     AuthResponse authResponse = new AuthResponse(adminToken, user);
     ResponseEntity<AuthResponse> expectedResult = ResponseEntity.ok(authResponse);
 
@@ -127,7 +127,7 @@ class UserControllerTest {
 
   @Test
   void loginUser_fail() {
-    when(userDao.login("user1", "password")).thenReturn(null);
+    when(userDao.login("user1", "password")).thenReturn(Optional.empty());
     ResponseEntity<User> expectedResult = ResponseEntity.badRequest().build();
 
     User userToLogin = new User();

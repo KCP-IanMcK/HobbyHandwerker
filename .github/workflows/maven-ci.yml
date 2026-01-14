@@ -85,6 +85,8 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/${MARIADB_DATABASE}
           SPRING_DATASOURCE_USERNAME: ${MARIADB_USER}
           SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD}
+          MARIADB_USER: ${{ secrets.MARIADB_USER }}
+          MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
 
       - name: Start backend in background with spring-boot:run
         run: nohup mvn --file backend/pom.xml spring-boot:run &
