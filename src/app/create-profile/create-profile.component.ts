@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-create-profile',
@@ -36,8 +37,7 @@ export class CreateProfileComponent {
   hasSpecialChar: boolean = false;
 
   message: string | null = null;
-  apiUrl = 'http://localhost:8080/user';
-
+  apiUrl = environment.apiUrl + 'user';
   constructor(private http: HttpClient) {}
 
   checkPasswordStrength(): void {
@@ -130,7 +130,6 @@ export class CreateProfileComponent {
     this.close.emit(false);
   }
 
-  // RESTORED: Helper function to hash password with SHA-256
   async hashPassword(password: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);

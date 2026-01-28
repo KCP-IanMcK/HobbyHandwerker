@@ -121,7 +121,6 @@ button[type="submit"]:hover:not(:disabled) {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Strength Meter */
 .strength-meter {
   height: 6px;
   background-color: #eee;
@@ -176,4 +175,15 @@ button[type="submit"]:hover:not(:disabled) {
 
 .password-requirements li.valid::before {
   content: '✓';
+}
+
+.closeCreateProfileButton {
+  float: right;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.5rem;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
