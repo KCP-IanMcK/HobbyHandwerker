@@ -167,3 +167,8 @@ textarea {
 .create-btn:hover {
   background-color: #357ABD;
 }
+
+.error-message {
+color: red !important;
+font-weight: bold;
+}
