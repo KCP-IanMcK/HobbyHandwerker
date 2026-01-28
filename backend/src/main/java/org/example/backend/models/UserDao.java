@@ -75,17 +75,18 @@ public class UserDao implements IUserDao {
 
           try (ResultSet resultSet = pstmt.executeQuery()) {
 
-            resultSet.next();
-            User u = new User();
-            u.setId_user(resultSet.getInt("ID_user"));
-            u.setUsername(resultSet.getString("username"));
-            u.setEmail(resultSet.getString("email"));
-            u.setPassword(resultSet.getString("password"));
-            u.setRole(resultSet.getInt("FS_Role"));
+            if (resultSet.next()) {
+              User u = new User();
+              u.setId_user(resultSet.getInt("ID_user"));
+              u.setUsername(resultSet.getString("username"));
+              u.setEmail(resultSet.getString("email"));
+              u.setPassword(resultSet.getString("password"));
+              u.setRole(resultSet.getInt("FS_Role"));
 
-            stmt.close();
-            con.close();
-            return u;
+              stmt.close();
+              con.close();
+              return u;
+            }
           }
         } catch (Exception e) {
           e.printStackTrace();
@@ -171,10 +172,15 @@ public class UserDao implements IUserDao {
         params.add(user.getPassword());
         paramNames.add("password");
       }
+      
+      if (paramNames.isEmpty()) {
+        return 0;
+      }
+      
       for (int i = 0; i < paramNames.size() - 1; i++) {
         tableSql += paramNames.get(i) + " = ?,";
       }
-      tableSql += paramNames.getLast() + " = ? ";
+      tableSql += paramNames.get(paramNames.size() - 1) + " = ? ";
       tableSql += "WHERE ID_user = ?";
 
       try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {
@@ -211,18 +217,18 @@ public class UserDao implements IUserDao {
 
         try (ResultSet resultSet = stmt.executeQuery()) {
 
-          resultSet.next();
+          if (resultSet.next()) {
+            boolean rightPassword = passwordService.verifyPassword(passwordSha, resultSet.getString("password"));
 
-          boolean rightPassword = passwordService.verifyPassword(passwordSha, resultSet.getString("password"));
+            if (rightPassword) {
+              User u = new User();
+              u.setId_user(resultSet.getInt("ID_user"));
+              u.setUsername(resultSet.getString("username"));
+              u.setEmail(resultSet.getString("email"));
+              u.setRole(resultSet.getInt("FS_Role"));
 
-          if (rightPassword) {
-            User u = new User();
-            u.setId_user(resultSet.getInt("ID_user"));
-            u.setUsername(resultSet.getString("username"));
-            u.setEmail(resultSet.getString("email"));
-            u.setRole(resultSet.getInt("FS_Role"));
-
-            user.add(u);
+              user.add(u);
+            }
           }
         }
         stmt.close();
@@ -232,7 +238,7 @@ public class UserDao implements IUserDao {
         con.close();
       }
       if (!user.isEmpty()) {
-        return user.getFirst();
+        return user.get(0);
       } else {
         return null;
       }
