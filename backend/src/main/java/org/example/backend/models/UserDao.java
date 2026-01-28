@@ -3,18 +3,15 @@ package org.example.backend.models;
 import org.example.backend.service.PasswordService;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserDao implements IUserDao {
 
   private final DataSource dataSource;
 
-  private PasswordService passwordService = new PasswordService();
+  private final PasswordService passwordService = new PasswordService();
 
   public UserDao(DataSource dataSource) {
     this.dataSource = dataSource;
@@ -22,221 +19,171 @@ public class UserDao implements IUserDao {
 
   @Override
   public List<User> select() {
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    List<User> user = new ArrayList<>();
-    try (Connection con = dataSource.getConnection()) {
+    String sql = "SELECT * FROM user";
 
-      try (Statement stmt = con.createStatement()) {
-        String tableSql = "SELECT * from user";
-        try (ResultSet resultSet = stmt.executeQuery(tableSql)) {
+    List<User> users = new ArrayList<>();
 
-          resultSet.next();
+    try (Connection con = dataSource.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
 
-          User u = new User();
-          u.setId_user(resultSet.getInt("ID_user"));
-          u.setUsername(resultSet.getString("username"));
-          u.setEmail(resultSet.getString("email"));
-          u.setRole(resultSet.getInt("FS_Role"));
+      while (rs.next()) {
+        User u = new User();
+        u.setId_user(rs.getInt("ID_user"));
+        u.setUsername(rs.getString("username"));
+        u.setEmail(rs.getString("email"));
+        u.setRole(rs.getInt("FS_Role"));
 
-          user.add(u);
-        }
-        stmt.close();
-        con.close();
-      } catch (Exception e) {
-        e.printStackTrace();
-        con.close();
+        users.add(u);
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+
+      return users;
+
+    } catch (SQLException e) {
+      throw new RuntimeException("Fehler beim Laden der User", e);
     }
-    System.out.println(user + "1");
-    return user;
   }
 
   @Override
-  public User select(int ID) {
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    try (Connection con = dataSource.getConnection()) {
+  public Optional<User> select(int id) {
 
-      try (Statement stmt = con.createStatement()) {
-        String tableSql = "SELECT * from user WHERE ID_user = ?;";
-        try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {
+    String sql = "SELECT * FROM user WHERE ID_user = ?";
 
-          pstmt.setInt(1, ID);
+    try (Connection con = dataSource.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-          try (ResultSet resultSet = pstmt.executeQuery()) {
+      ps.setInt(1, id);
 
-            resultSet.next();
-            User u = new User();
-            u.setId_user(resultSet.getInt("ID_user"));
-            u.setUsername(resultSet.getString("username"));
-            u.setEmail(resultSet.getString("email"));
-            u.setPassword(resultSet.getString("password"));
-            u.setRole(resultSet.getInt("FS_Role"));
-
-            stmt.close();
-            con.close();
-            return u;
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-          con.close();
+      try (ResultSet rs = ps.executeQuery()) {
+        if (!rs.next()) {
+          return Optional.empty();
         }
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
+
+        User user = new User();
+        user.setId_user(rs.getInt("ID_user"));
+        user.setUsername(rs.getString("username"));
+        user.setEmail(rs.getString("email"));
+        user.setPassword(rs.getString("password"));
+        user.setRole(rs.getInt("FS_Role"));
+
+        return Optional.of(user);
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+
+    } catch (SQLException e) {
+      throw new RuntimeException("Fehler beim Laden des Users", e);
     }
-    return null;
   }
 
   @Override
-  public User saveUser(User user) {
-    int result;
+  public Optional<User> saveUser(User user) {
 
     user.setPassword(passwordService.hashPassword(user.getPassword()));
 
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    try (Connection con = dataSource.getConnection()) {
+    String sql = "INSERT INTO user (username, email, password, FS_Role) VALUES (?, ?, ?, ?)";
 
-      try (PreparedStatement stmt = con.prepareStatement("INSERT INTO user (username, email, password, FS_Role) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-        stmt.setString(1, user.getUsername());
-        stmt.setString(2, user.getEmail());
-        stmt.setString(3, user.getPassword());
-        stmt.setInt(4, 2); //Role "user"
-        result = stmt.executeUpdate();
-        if (result > 0) {
-          try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-              user.setId_user(generatedKeys.getInt(1));
-            }
-          }
-          return user;
-        }
-        stmt.close();
-        con.close();
-      } catch (Exception e) {
-        e.printStackTrace();
-        con.close();
+    try (Connection con = dataSource.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+      ps.setString(1, user.getUsername());
+      ps.setString(2, user.getEmail());
+      ps.setString(3, user.getPassword());
+      ps.setInt(4, 2); // role USER
+
+      int affectedRows = ps.executeUpdate();
+      if (affectedRows == 0) {
+        return Optional.empty();
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+
+      try (ResultSet keys = ps.getGeneratedKeys()) {
+        if (keys.next()) {
+          user.setId_user(keys.getInt(1));
+        }
+      }
+
+      return Optional.of(user);
+
+    } catch (SQLException e) {
+      throw new RuntimeException("User konnte nicht gespeichert werden", e);
     }
-    return null;
   }
 
   @Override
-  public int update(int ID, User user) {
-    int count = 0;
-    user.setPassword(passwordService.hashPassword(user.getPassword()));
+  public int update(int id, User user) {
 
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (Exception e) {
-      e.printStackTrace();
+    if (user.getPassword() != null) {
+      user.setPassword(passwordService.hashPassword(user.getPassword()));
     }
 
-    try (Connection con = dataSource.getConnection()) {
-      String tableSql = "UPDATE user SET ";
-      List<Object> params = new ArrayList<>();
-      List<String> paramNames = new ArrayList<>();
-      if (user.getUsername() != null) {
-        params.add(user.getUsername());
-        paramNames.add("username");
-      }
-      if (user.getEmail() != null) {
-        params.add(user.getEmail());
-        paramNames.add("email");
-      }
-      if (user.getPassword() != null) {
-        params.add(user.getPassword());
-        paramNames.add("password");
-      }
-      for (int i = 0; i < paramNames.size() - 1; i++) {
-        tableSql += paramNames.get(i) + " = ?,";
-      }
-      tableSql += paramNames.getLast() + " = ? ";
-      tableSql += "WHERE ID_user = ?";
+    Map<String, Object> fields = new LinkedHashMap<>();
 
-      try (PreparedStatement pstmt = con.prepareStatement(tableSql)) {
-        for (int i = 0; i < params.size(); i++) {
-          pstmt.setObject(i + 1, params.get(i));
-        }
-        pstmt.setInt(params.size() + 1, ID);
-        System.out.println(pstmt);
-        pstmt.execute();
-        count = pstmt.getUpdateCount();
-      } catch (Exception e) {
-        e.printStackTrace();
-        con.close();
-      }
-      return count;
-    } catch (Exception e) {
-      e.printStackTrace();
+    if (user.getUsername() != null) {
+      fields.put("username", user.getUsername());
     }
-    return count;
+    if (user.getEmail() != null) {
+      fields.put("email", user.getEmail());
+    }
+    if (user.getPassword() != null) {
+      fields.put("password", user.getPassword());
+    }
+
+    if (fields.isEmpty()) {
+      return 0;
+    }
+
+    String sql = "UPDATE user SET " +
+      fields.keySet().stream()
+        .map(k -> k + " = ?")
+        .collect(Collectors.joining(", "))
+      + " WHERE ID_user = ?";
+
+    try (Connection con = dataSource.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+      int index = 1;
+      for (Object value : fields.values()) {
+        ps.setObject(index++, value);
+      }
+      ps.setInt(index, id);
+
+      return ps.executeUpdate();
+
+    } catch (SQLException e) {
+      throw new RuntimeException("Update fehlgeschlagen", e);
+    }
   }
 
+
   @Override
-  public User login(String username, String passwordSha) {
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    List<User> user = new ArrayList<>();
-    try (Connection con = dataSource.getConnection()) {
-      String sql = "SELECT * FROM user where username = ?;";
-      try (PreparedStatement stmt = con.prepareStatement(sql)) {
-        stmt.setString(1, username);
+  public Optional<User> login(String username, String passwordSha) {
 
-        try (ResultSet resultSet = stmt.executeQuery()) {
+    String sql = "SELECT * FROM user WHERE username = ?";
 
-          resultSet.next();
+    try (Connection con = dataSource.getConnection();
+         PreparedStatement stmt = con.prepareStatement(sql)) {
 
-          boolean rightPassword = passwordService.verifyPassword(passwordSha, resultSet.getString("password"));
+      stmt.setString(1, username);
 
-          if (rightPassword) {
-            User u = new User();
-            u.setId_user(resultSet.getInt("ID_user"));
-            u.setUsername(resultSet.getString("username"));
-            u.setEmail(resultSet.getString("email"));
-            u.setRole(resultSet.getInt("FS_Role"));
+      try (ResultSet rs = stmt.executeQuery()) {
 
-            user.add(u);
-          }
+        if (!rs.next()) {
+          return Optional.empty();
         }
-        stmt.close();
-        con.close();
-      } catch (Exception e) {
-        e.printStackTrace();
-        con.close();
+
+        if (!passwordService.verifyPassword(passwordSha, rs.getString("password"))) {
+          return Optional.empty();
+        }
+
+        User user = new User();
+        user.setId_user(rs.getInt("ID_user"));
+        user.setUsername(rs.getString("username"));
+        user.setEmail(rs.getString("email"));
+        user.setRole(rs.getInt("FS_Role"));
+
+        return Optional.of(user);
       }
-      if (!user.isEmpty()) {
-        return user.getFirst();
-      } else {
-        return null;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+
+    } catch (SQLException e) {
+      throw new RuntimeException("Login fehlgeschlagen", e);
     }
-    return null;
   }
 }

@@ -8,7 +8,6 @@ import { LoginComponent } from '../login/login.component'; // Import Login
 @Component({
   selector: 'app-home',
   standalone: true,
-  // Make sure LoginComponent is in the imports list
   imports: [ProfileComponent, CommonModule, ExplorerComponent, LoginComponent, CreateProfileComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
@@ -19,8 +18,6 @@ export class HomeComponent implements OnInit {
   userId: String | null = null;
   showCreateProfile: boolean = false;
   isLoggedIn: boolean = false;
-
-  // New State: Are we looking at the login screen?
   isLoginView = false;
 
   constructor() {}
@@ -53,5 +50,10 @@ export class HomeComponent implements OnInit {
 
   closeCreateProfile(): void {
     this.showCreateProfile = false;
+  }
+
+logOut(): void {
+  localStorage.clear();
+  window.location.reload();
   }
 }
