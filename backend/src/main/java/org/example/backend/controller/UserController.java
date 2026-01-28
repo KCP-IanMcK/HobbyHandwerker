@@ -62,7 +62,7 @@ public class UserController {
       .parseClaimsJws(token)
       .getBody();
     int role = claims.get("role", Integer.class);
-    if (role != 2 && role != 3) { // user oder admin
+    if (role != 3) { // nur admin
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
