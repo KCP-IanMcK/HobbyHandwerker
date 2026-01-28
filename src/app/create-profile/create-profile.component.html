@@ -1,12 +1,9 @@
 <div id="createProfileContainer" class="create-profile-container">
-  <div style="display: flex; justify-content: flex-end;">
-    <button id="closeCreateProfileButton" (click)="closePopup()" style="padding: 0.5rem 1rem;">
-      X
-    </button>
-  </div>
+  <button id="closeCreateProfileButton" (click)="closePopup()" >&times;</button>
   <h2>Neues Profil erstellen</h2>
 
-  <form (ngSubmit)="submitForm()" novalidate>
+  <form (ngSubmit)="submitForm()" #profileForm="ngForm" novalidate>
+
     <label for="username">Name:</label>
     <input
       type="text"
@@ -14,11 +11,11 @@
       name="username"
       required
       [(ngModel)]="profile.username"
-      #name="ngModel"
-      [class.invalid]="name.invalid && name.touched"
+      #username="ngModel"
+      [class.invalid]="username.invalid && username.touched"
       placeholder="Dein Name"
     />
-    <div *ngIf="name.invalid && name.touched" class="error-msg">
+    <div *ngIf="username.invalid && username.touched" class="error-msg">
       Name ist Pflicht.
     </div>
 
@@ -44,14 +41,38 @@
       id="password"
       name="password"
       required
-      minlength="12"
+      minlength="8"
       [(ngModel)]="profile.password"
       #password="ngModel"
+      (input)="checkPasswordStrength()"
+      (focus)="showPasswordMeter = true"
       [class.invalid]="password.invalid && password.touched"
       placeholder="Dein Passwort"
     />
+
+    <!-- Only show strength meter when user focuses on password field -->
+    <div *ngIf="showPasswordMeter">
+      <div class="strength-meter">
+        <div
+          class="strength-bar"
+          [style.width.%]="strengthScore * 25"
+          [style.background-color]="strengthColor">
+        </div>
+      </div>
+
+      <p class="strength-text" [style.color]="strengthColor">{{ strengthText }}</p>
+
+      <ul class="password-requirements">
+        <li [class.valid]="hasMinLength">Mindestens 12 Zeichen</li>
+        <li [class.valid]="hasUpperCase">Großbuchstabe</li>
+        <li [class.valid]="hasLowerCase">Kleinbuchstabe</li>
+        <li [class.valid]="hasNumber">Zahl</li>
+        <li [class.valid]="hasSpecialChar">Sonderzeichen (!#$...)</li>
+      </ul>
+    </div>
+
     <div *ngIf="password.invalid && password.touched" class="error-msg">
-      Passwort ist Pflicht (mindestens 12 Zeichen).
+      Passwort ist Pflicht.
     </div>
 
     <label for="avatarUrl">Profilbild URL:</label>
